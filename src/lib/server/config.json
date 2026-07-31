@@ -1,0 +1,41 @@
+{
+	"app": {
+		"name": "MyApp",
+		"version": "0.1.0"
+	},
+	"auth": {
+		"emailAndPassword": {
+			"enabled": true,
+			"minPasswordLength": 8,
+			"requireEmailVerification": true
+		},
+		"socialProviders": {
+			"google": false,
+			"github": false
+		},
+		"session": {
+			"expiresIn": 604800,
+			"updateAge": 86400,
+			"freshAge": 86400
+		},
+		"organization": {
+			"allowUserToCreateOrganization": true,
+			"creatorRole": "owner",
+			"invitationExpiresIn": 172800,
+			"membershipLimit": 100
+		}
+	},
+	"mail": {
+		"from": "MyApp <onboarding@resend.dev>"
+	},
+	"uploads": {
+		"maxBytes": 5242880,
+		"accept": ["image/jpeg", "image/png", "image/webp", "image/avif"],
+		"requireSession": true,
+		"presets": {
+			"avatar": { "width": 256, "height": 256, "fit": "cover", "quality": 82 },
+			"logo": { "width": 256, "height": 256, "fit": "contain", "quality": 85 },
+			"content": { "width": 1280, "height": 720, "fit": "inside", "quality": 78 }
+		}
+	}
+}

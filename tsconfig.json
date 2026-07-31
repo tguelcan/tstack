@@ -1,0 +1,15 @@
+{
+	"extends": "$app/tsconfig",
+	"include": ["src"],
+	"compilerOptions": {
+		"rewriteRelativeImportExtensions": true,
+		"sourceMap": true,
+		"strict": true
+	}
+	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
+	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
+	//
+	// allowJs, checkJs, esModuleInterop, forceConsistentCasingInFileNames,
+	// resolveJsonModule, skipLibCheck and moduleResolution are already set
+	// by the generated `$app/tsconfig`.
+}

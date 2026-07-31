@@ -1,0 +1,212 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+// Since Prisma 7 the connection URL no longer lives here. It sits in
+// `prisma.config.ts` (for the CLI) and in the adapter in `src/lib/server/db.ts`.
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Better Auth
+//
+// The seven models below are owned by Better Auth — it reads and writes them
+// through the Prisma adapter, and their field names are its contract, not ours.
+// They are hand-written rather than produced by `@better-auth/cli generate`:
+// the CLI trails the library by two minor versions and cannot resolve this
+// project's aliases (`$app/env/private`, and `$server/*`, which live in
+// `vite.config.ts` rather than a `svelte.config.js`). Instead
+// `src/lib/server/auth.spec.ts` compares this schema against
+// `getAuthTables(auth.options)` on every test run, which keeps it honest across
+// upgrades. Change a field here and that test tells you whether you were right.
+//
+// Ids are plain `String`, not `uuid`: Better Auth generates them itself.
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Ours, declared to Better Auth via `user.additionalFields` so they travel
+  // with the session instead of needing a second query on every page.
+  bio      String?
+  timezone String?
+
+  sessions      Session[]
+  accounts      Account[]
+  memberships   Member[]
+  sentInvites   Invitation[]
+  tasks         Task[]
+  notifications NotificationSettings?
+}
+
+model Session {
+  id        String   @id
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Added by the organization plugin. Without this column "switch organization"
+  // is a silent no-op — the endpoint succeeds and nothing changes.
+  activeOrganizationId String?
+
+  @@index([userId])
+}
+
+model Account {
+  id         String @id
+  accountId  String
+  providerId String
+
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  // Only set for `providerId = "credential"`; scrypt, hashed by Better Auth.
+  password              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  // The lookup on every social sign-in. Deliberately not unique: Better Auth
+  // does not declare it either, and a surprise constraint violation would
+  // surface as a 500 rather than as its own error message.
+  @@index([providerId, accountId])
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Every token check starts here.
+  @@index([identifier])
+}
+
+model Organization {
+  id        String   @id
+  name      String
+  slug      String   @unique
+  logo      String?
+  // JSON, but Better Auth hands it over as a string — leave the parsing to it.
+  metadata  String?
+  createdAt DateTime @default(now())
+
+  members     Member[]
+  invitations Invitation[]
+  tasks       Task[]
+}
+
+model Member {
+  id        String   @id
+  role      String   @default("member")
+  createdAt DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // A user belongs to an organization once. Better Auth checks this before
+  // adding a member, but two invitations accepted at the same moment would slip
+  // through that check — this is where the race actually stops.
+  @@unique([organizationId, userId])
+  @@index([userId])
+}
+
+model Invitation {
+  id        String   @id
+  email     String
+  role      String?
+  status    String   @default("pending")
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  inviterId      String
+  inviter        User         @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  // The member list shows pending invitations next to the members.
+  @@index([organizationId, status])
+  // "Which invitations are waiting for me?" on the onboarding page.
+  @@index([email, status])
+  @@index([inviterId])
+}
+
+// ---------------------------------------------------------------------------
+// Ours
+// ---------------------------------------------------------------------------
+
+model NotificationSettings {
+  // One row per user, so the user id doubles as the primary key.
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  mentions       Boolean @default(true)
+  assignments    Boolean @default(true)
+  weeklyDigest   Boolean @default(false)
+  productUpdates Boolean @default(true)
+  desktop        Boolean @default(false)
+
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  description String
+  done        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // A task belongs to an organization, never to a user directly — that is what
+  // makes every query in `task.remote.ts` a tenant query.
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  // Who created it. Nullable and `SetNull`, so closing an account does not take
+  // the organization's tasks down with it.
+  createdById String?
+  createdBy   User?   @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  // Every index leads with `organizationId`, because every query filters on it
+  // first. Without that prefix an equality filter on a different column stops
+  // Postgres from walking these in order, and the top-N sorts below turn back
+  // into full-table scans — which is the whole point of having them.
+  //
+  // Covers the default ordering (createdAt desc, tiebreak id).
+  @@index([organizationId, createdAt(sort: Desc), id(sort: Desc)])
+  // Covers the status filter combined with the default ordering.
+  @@index([organizationId, done, createdAt(sort: Desc)])
+  // One index per sortable column (see `$helper/task`), each with the id
+  // tiebreak. Sorting by `done` still scans; a boolean sort is two groups and
+  // not worth its own index.
+  // Note for ~100k+ rows: the `q` search uses ILIKE '%…%', which no b-tree can
+  // serve — add a pg_trgm GIN index via a manual migration when that bites.
+  @@index([organizationId, updatedAt(sort: Desc), id(sort: Desc)])
+  @@index([organizationId, description, id])
+  @@index([createdById])
+}

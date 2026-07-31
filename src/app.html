@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-sidebar="expanded">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="text-scale" content="scale" />
+		<!--
+			Restores the stored theme and sidebar width before the first paint. This has
+			to be inline and blocking: anything Svelte renders arrives after hydration,
+			which is exactly the flash of the wrong theme we are avoiding here.
+		-->
+		<script>
+			(() => {
+				const root = document.documentElement;
+				try {
+					const theme = localStorage.getItem('tstack:theme');
+					root.dataset.theme =
+						theme ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+					root.dataset.sidebar = localStorage.getItem('tstack:sidebar') ?? 'expanded';
+				} catch {
+					// Storage blocked (private mode, strict settings) — keep the defaults
+					// already present on the <html> element.
+				}
+			})();
+		</script>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>

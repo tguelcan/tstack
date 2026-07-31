@@ -1,0 +1,143 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@plugin 'daisyui';
+
+@plugin 'daisyui/theme' {
+	name: 'light';
+	color-scheme: 'light';
+	default: true;
+	--color-base-100: oklch(100% 0 0);
+	--color-base-200: oklch(93% 0 0);
+	--color-base-300: oklch(86% 0 0);
+	/* #06231D */
+	--color-base-content: oklch(23.2% 0.037 176.8);
+	/* #076653 */
+	--color-primary: oklch(45.6% 0.085 173.7);
+	--color-primary-content: oklch(99.2% 0.02 100.6);
+	/* #0C342C */
+	--color-secondary: oklch(29.5% 0.046 177);
+	--color-secondary-content: oklch(95.8% 0.065 131.3);
+	/* #E3EF26 */
+	--color-accent: oklch(91.3% 0.197 113.4);
+	--color-accent-content: oklch(23.2% 0.037 176.8);
+	/* #0C342C */
+	--color-neutral: oklch(29.5% 0.046 177);
+	--color-neutral-content: oklch(99.2% 0.02 100.6);
+	--color-info: oklch(66% 0.116 172.7);
+	--color-info-content: oklch(23.2% 0.037 176.8);
+	--color-success: oklch(58% 0.13 152);
+	--color-success-content: oklch(99.2% 0.02 100.6);
+	--color-warning: oklch(85% 0.17 90);
+	--color-warning-content: oklch(23.2% 0.037 176.8);
+	--color-error: oklch(62.6% 0.193 23);
+	--color-error-content: oklch(99.2% 0.02 100.6);
+	--radius-selector: 0.5rem;
+	--radius-field: 0.5rem;
+	--radius-box: 0.5rem;
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+	--border: 1px;
+	--depth: 0;
+	--noise: 0;
+}
+
+/* Only the surface changes between the themes: neutral greys instead of white,
+   because a tinted dark background makes everything on top of it look muddy.
+   The brand and status colours are the *same values* as in `light` — a dark
+   theme with its own greens would be a second brand.
+   `prefersdark` makes this the theme for visitors who have not chosen one. */
+@plugin 'daisyui/theme' {
+	name: 'dark';
+	color-scheme: 'dark';
+	prefersdark: true;
+	--color-base-100: oklch(20.5% 0.004 260);
+	--color-base-200: oklch(25% 0.005 260);
+	--color-base-300: oklch(31% 0.006 260);
+	--color-base-content: oklch(94% 0.003 260);
+	/* #076653 */
+	--color-primary: oklch(45.6% 0.085 173.7);
+	--color-primary-content: oklch(99.2% 0.02 100.6);
+	/* #0C342C */
+	--color-secondary: oklch(29.5% 0.046 177);
+	--color-secondary-content: oklch(95.8% 0.065 131.3);
+	/* #E3EF26 */
+	--color-accent: oklch(91.3% 0.197 113.4);
+	--color-accent-content: oklch(23.2% 0.037 176.8);
+	/* The one colour that has to differ. `neutral` is not a brand tone but the
+	   "contrasts with the surface" tone: dark on white in `light`, so light on
+	   near-black here. Reusing the dark teal would make `btn-neutral` and
+	   especially `btn-outline btn-neutral` dissolve into the background. */
+	--color-neutral: oklch(92% 0.003 260);
+	--color-neutral-content: oklch(20.5% 0.004 260);
+	--color-info: oklch(66% 0.116 172.7);
+	--color-info-content: oklch(23.2% 0.037 176.8);
+	--color-success: oklch(58% 0.13 152);
+	--color-success-content: oklch(99.2% 0.02 100.6);
+	--color-warning: oklch(85% 0.17 90);
+	--color-warning-content: oklch(23.2% 0.037 176.8);
+	--color-error: oklch(62.6% 0.193 23);
+	--color-error-content: oklch(99.2% 0.02 100.6);
+	--radius-selector: 0.5rem;
+	--radius-field: 0.5rem;
+	--radius-box: 0.5rem;
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+	--border: 1px;
+	--depth: 0;
+	--noise: 0;
+}
+
+/**
+* Create and override daisyUI theme variables.
+*/
+.text-muted {
+	@apply text-base-content/60;
+}
+
+.input,
+.select,
+.textarea {
+	@apply w-full bg-base-100;
+}
+
+[data-theme='light'] .btn-neutral {
+	@apply hover:text-base-100;
+}
+
+/*
+ * The app sidebar collapses to icon width. The state lives in `data-sidebar` on
+ * `<html>` rather than in a Svelte class, so the inline script in `app.html` can
+ * restore the stored value before the first paint — a class rendered by Svelte
+ * would only land after hydration and the sidebar would visibly jump.
+ * Below `lg` the sidebar is an off-canvas drawer, where collapsing makes no sense.
+ */
+@media (width >= 64rem) {
+	:root[data-sidebar='collapsed'] .sidebar-panel {
+		width: 4.5rem;
+	}
+
+	:root[data-sidebar='collapsed'] .sidebar-panel .sidebar-label {
+		display: none;
+	}
+
+	:root[data-sidebar='collapsed'] .sidebar-panel .sidebar-item {
+		justify-content: center;
+	}
+}
+
+/*
+ * Animations (replaces tailwindcss-motion)
+ * Usage: animate-fade-in
+ */
+@theme {
+	--animate-fade-in: fade-in 0.2s ease-out;
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
