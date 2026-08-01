@@ -1,12 +1,68 @@
+<div align="center">
+
+<img src="src/lib/assets/favicon.svg" alt="tstack" width="64" height="64">
+
 # tstack
 
-SvelteKit app using remote functions, Prisma 7 (Postgres), Tailwind 4 + daisyUI 5, managed with [bun](https://bun.sh).
+**The boring parts of a SaaS, already built.**
 
-## Setup
+A production-minded SvelteKit boilerplate: authentication, organizations,
+multi-tenancy, transactional email, image uploads, a themed component library
+and a worked CRUD example — so your first commit is your product, not your
+plumbing.
+
+[![CI](https://github.com/tguelcan/tstack/actions/workflows/ci.yml/badge.svg)](https://github.com/tguelcan/tstack/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Svelte 5](https://img.shields.io/badge/Svelte-5-FF3E00?logo=svelte&logoColor=white)](https://svelte.dev)
+[![SvelteKit](https://img.shields.io/badge/SvelteKit-remote_functions-FF3E00?logo=svelte&logoColor=white)](https://svelte.dev/docs/kit)
+[![Prisma 7](https://img.shields.io/badge/Prisma-7-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io)
+[![Tailwind CSS 4](https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![daisyUI 5](https://img.shields.io/badge/daisyUI-5-1AD1A5)](https://daisyui.com)
+[![bun](https://img.shields.io/badge/bun-runtime-black?logo=bun&logoColor=white)](https://bun.sh)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
+[Quickstart](#quickstart) · [Features](#whats-inside) · [Deploy](#deploy-to-railway) · [Architecture](docs/ARCHITECTURE.md) · [Building with AI agents](#building-with-ai-agents) · [Contributing](CONTRIBUTING.md)
+
+</div>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/screenshots/dashboard-dark.png">
+  <img src=".github/screenshots/dashboard.png" alt="The tstack dashboard" width="100%">
+</picture>
+
+<details>
+<summary><strong>More screenshots</strong></summary>
+
+|                                   Sign in                                   |                           Tasks (the CRUD example)                           |
+| :-------------------------------------------------------------------------: | :--------------------------------------------------------------------------: |
+|               ![Sign-in page](.github/screenshots/login.png)                | ![Task list with search, filters and sorting](.github/screenshots/tasks.png) |
+| ![Members page with roles and invitations](.github/screenshots/members.png) |      ![Dashboard in dark mode](.github/screenshots/dashboard-dark.png)       |
+
+**Component gallery** — every element ships with a live reference page at `/components`:
+
+![Component gallery in dark mode](.github/screenshots/components-dark.png)
+
+</details>
+
+## What's inside
+
+- **Auth that works without JavaScript** — [Better Auth](https://better-auth.com) with email + password, email verification, password reset, and optional Google/GitHub OAuth. Every flow is a progressively-enhanced form.
+- **Organizations & multi-tenancy** — workspaces with roles, invitations and an org switcher. Every query is scoped to the active organization, including bulk writes.
+- **Remote functions only** — the single client↔server data path is [SvelteKit remote functions](https://svelte.dev/docs/kit/remote-functions); every one starts with an authorization guard.
+- **A worked CRUD example** — `/crud` is a task list with search, filters, sorting and "load more", where the entire list state lives in the URL. Copy the pattern for your own models.
+- **Component library** — `Button`, `Field`, `Modal`, `DataTable`, `Toaster` and friends on Tailwind 4 + daisyUI 5, with light/dark themes and a live gallery at `/components`.
+- **Transactional email** — [Resend](https://resend.com) with one consistent message shape; without an API key every mail is printed to the terminal, so local sign-up just works.
+- **Image uploads** — every upload goes through [sharp](https://sharp.pixelplumbing.com) into preset-sized WebP, served with a session gate and path-traversal checks.
+- **Typed everything** — Prisma 7 (Postgres), Zod, explicit environment variable declarations, strict TypeScript, ESLint + Prettier.
+- **Tested** — unit, browser component and HTTP integration tests, all running in CI.
+
+## Quickstart
+
+You need [bun](https://bun.sh) and a Postgres. No Postgres at hand? `bunx prisma dev` starts a local one and prints the connection URL.
 
 ```sh
 bun install
-cp .env.example .env   # DATABASE_URL, BETTER_AUTH_SECRET, BETTER_AUTH_URL
+cp .env.example .env   # set DATABASE_URL, BETTER_AUTH_SECRET, BETTER_AUTH_URL
 bun run db:migrate     # apply migrations
 bun run db:seed        # demo users, two organizations, a task list
 bun run dev
@@ -22,154 +78,89 @@ sent, which is what makes signing up locally possible at all given that the addr
 confirmed first. The seeded accounts skip that — sign in as `owner@example.com` with the
 password `demo-password`.
 
+### Make it yours
+
+1. **Name it** — `app.name` in `src/lib/server/config.json`, plus `name` in `package.json`.
+2. **Brand it** — the logo in `src/lib/components/layout/Logo.svelte`, the two themes in `src/lib/css/main.css`.
+3. **Replace the demo content** — the dashboard figures and billing plans still come from `src/lib/helper/demo.ts`; delete an export there and follow the type errors.
+4. **Add your first model** — copy the `/crud` pattern: a Prisma model, a list config next to `src/lib/helper/task.ts`, a remote function, a page. [The architecture guide](docs/ARCHITECTURE.md) walks through it.
+
 ## Scripts
 
 | Script                              | Purpose                                                               |
 | ----------------------------------- | --------------------------------------------------------------------- |
 | `bun run dev` / `build` / `preview` | Vite dev server / production build / preview                          |
+| `bun run start`                     | Serve the production build (`node build/index.js`)                    |
 | `bun run check`                     | `svelte-check` type checking                                          |
 | `bun run lint` / `format`           | Prettier + ESLint / auto-format                                       |
 | `bun run test`                      | Vitest (unit + browser component tests)                               |
-| `bun run db:migrate`                | Create/apply Prisma migrations                                        |
+| `bun run test:integration`          | HTTP integration tests against the production build (needs a DB)      |
+| `bun run db:migrate`                | Create/apply Prisma migrations (development)                          |
+| `bun run db:deploy`                 | Apply committed migrations (production/CI)                            |
 | `bun run db:generate`               | Regenerate the Prisma client into `src/generated`                     |
 | `bun run db:seed`                   | Seed demo users, organizations and tasks (skips when there are users) |
 | `bun run db:studio`                 | Prisma Studio                                                         |
 
-## Architecture
+## Testing
 
-- **`src/lib/remotes/*.remote.ts`** — [remote functions](https://svelte.dev/docs/kit/remote-functions) (`query`/`form`), the only client↔server data path. Everything works without JavaScript and is progressively enhanced.
-- **`src/lib/server/`** — server-only modules: the Better Auth instance (`auth.ts`), authorization for remote functions (`guard.ts`), Prisma client (`db.ts`), list→Prisma translation (`list.ts`), transactional email (`mail.ts`), image processing (`upload.ts`), and the parsed `config.json` (`config.ts`).
-- **`src/lib/helper/`** — shared, pure helpers: URL-driven list state (`list.ts`), per-model list configs (`task.ts`), form utilities (`form.ts`), formatters and `slugify`/`describeUserAgent` (`format.ts`), placeholder content for the pages that are still a template (`demo.ts`). Unit-tested via colocated `*.spec.ts`.
-- **`src/lib/components/elements/`** — reusable UI building blocks (`Button`, `Badge`, `Card`, `DataTable`, `StatCard`, `Alert`, `EmptyState`, `Field`, `Switch`, `Tabs`, `Modal`, `Toaster`, `Icon`, `Avatar`, list widgets). New elements go here.
-- **`src/lib/components/layout/`** — page chrome: `AppShell`, `Sidebar`, `Topbar`, `UserMenu`, `PageHeader`, `BrandPanel`, `Footer`, `Logo`, `ThemeToggle`, plus the navigation config and the two state modules.
-- **`src/generated/`** — Prisma client output; gitignored, recreated by `db:generate`.
-- **`src/hooks.server.ts`** — puts the session on `locals` and redirects page navigations. Explicitly _not_ the authorization boundary; see “Auth” below.
-- **`src/env.ts`** — explicit [environment variable](https://svelte.dev/docs/kit/environment-variables) declarations. Secrets only; what is a decision rather than a secret lives in `src/lib/server/config.json`.
+Three layers, all running in [CI](.github/workflows/ci.yml):
 
-## Routes
+- **Unit tests** — colocated `*.spec.ts` next to the helpers they test.
+- **Component tests** — `*.svelte.spec.ts` in real Chromium via Vitest browser mode.
+- **Integration tests** — `tests/integration/` boots the production build against a real
+  Postgres and exercises sign-in, the auth wall and the seeded workspace over plain HTTP:
+  `bun run build && bun run test:integration`.
 
-The SaaS scaffolding is split into [route groups](https://svelte.dev/docs/kit/advanced-routing#Advanced-layouts), so each area brings its own layout without showing up in the URL:
+## Deploy to Railway
 
-| Group          | Routes                                                                        | Layout                                     |
-| -------------- | ----------------------------------------------------------------------------- | ------------------------------------------ |
-| `(auth)`       | `/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password` | Form on the left, brand panel from `lg` up |
-| `(onboarding)` | `/onboarding`, `/accept-invitation/[id]`                                      | A single centred column                    |
-| `(app)`        | `/dashboard`, `/crud/*`, `/members`, `/profile`, `/settings/*`                | `AppShell`: collapsible sidebar + topbar   |
-| `(content)`    | `/privacy`, `/terms`, `/imprint` — written as `+page.md`                      | Prose column with header and footer        |
-| —              | `/`, `/components`, `/api/auth/*`, `/uploads/*`                               | Own layouts, or none                       |
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template?template=https%3A%2F%2Fgithub.com%2Ftguelcan%2Ftstack)
 
-Everything under `(auth)`, `(onboarding)` and `(app)` reads real data. What is left of the
-template is the dashboard's figures and the billing plans, which still come from
-`src/lib/helper/demo.ts` — delete an export from there and follow the type errors.
+The repo ships a [`railway.json`](railway.json) that builds with bun, runs
+`prisma migrate deploy` before each deployment and serves `build/index.js`. After clicking the
+button (or creating a service from your fork):
 
-`(onboarding)` exists because a signed-in user without an organization has nowhere to be: every
-page in `(app)` is scoped to one. That group has its own layout for the same reason — the brand
-panel of `(auth)` would read as a step backwards, and the shell's sidebar would be a menu of
-pages that all bounce straight back.
+1. **Add a Postgres** to the project and reference its URL: `DATABASE_URL = ${{Postgres.DATABASE_URL}}`.
+2. **Set the secrets** — `BETTER_AUTH_SECRET` (`openssl rand -base64 32`), and point both
+   `BETTER_AUTH_URL` and `ORIGIN` at your public origin, e.g. `https://${{RAILWAY_PUBLIC_DOMAIN}}`.
+3. **Attach a volume** and set `UPLOAD_DIR` to its mount path, e.g. `/data/uploads` — anything
+   inside the app directory is wiped on the next deployment, along with every avatar and logo.
 
-Note that a group is part of the route id, so `resolve()` and `RouteParams<…>` take `'/(app)/crud/[id]'`, not `'/crud/[id]'` — the URL stays `/crud/…` either way.
+Details, other platforms and the `sharp` caveat: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
-## Auth
+## Building with AI agents
 
-[Better Auth](https://better-auth.com) with the organization plugin, configured in
-`src/lib/server/auth.ts`. Email and password are on by default; Google and GitHub are switched on
-in `src/lib/server/config.json` and read their credentials from the environment. An address has to
-be confirmed before the first sign-in.
+This template is written to be worked on by AI coding agents — the conventions are few, explicit
+and machine-checkable:
 
-The Better Auth **client is not used**. Every flow is a remote `form` calling `auth.api.*` on the
-server, which is what keeps sign-in, sign-up, "Continue with Google" and sign-out working without
-JavaScript — the same rule the rest of the app follows. The `sveltekitCookies` plugin writes the
-cookies back through `event.cookies`, and it has to stay last in the plugin list.
+- **[AGENTS.md](AGENTS.md)** — the contract: architecture rules, guardrails and the commands an
+  agent should run before calling anything done. `CLAUDE.md` points Claude Code at the same file.
+- **Svelte MCP server** — [`.mcp.json`](.mcp.json) connects agents to the official
+  [Svelte MCP server](https://svelte.dev/docs/mcp) for current Svelte 5 / SvelteKit docs and an
+  autofixer, so agents don't write Svelte 4 from memory.
+- **Guarded by design** — authorization lives in `src/lib/server/guard.ts` and every remote
+  function starts with it; the layering means a generated feature is safe by construction, not by
+  review.
+- **Types as the safety net** — deleting a demo export or renaming a field produces type errors
+  that lead an agent through every affected file.
 
-### Where authorization actually lives
+## Documentation
 
-`src/hooks.server.ts` is convenience, not security. It hands remote requests straight to `resolve`,
-for two reasons that are easy to miss:
+- [Architecture](docs/ARCHITECTURE.md) — remote functions, auth, multi-tenancy, uploads, email, theming, lists.
+- [Deployment](docs/DEPLOYMENT.md) — Railway step by step, environment variables, migrations.
+- [Contributing](CONTRIBUTING.md) — dev setup, checks, how to get a PR merged.
+- [AGENTS.md](AGENTS.md) — the guide AI coding agents (and new humans) should read first.
 
-- a remote `query` sends no `x-sveltekit-pathname` header, so SvelteKit never resolves a route and
-  `event.route.id` is `null`;
-- for the other kinds that header comes from the client, so a `curl` with
-  `x-sveltekit-pathname: /login` would walk past any guard that branches on it.
+## Contributing
 
-So **every remote function starts with a call from `src/lib/server/guard.ts`** — `requireUser()`,
-`requireOrg()` or `requirePermission()` — and nothing in `src/lib/remotes` touches `prisma` without
-one. What is left in the hook is the part that makes the app pleasant: a signed-out visitor lands on
-the login form and comes back to the page they wanted.
+Found a bug, a rough edge in the docs, or a pattern that deserves to be in the template? PRs and
+issues are very welcome — this project grows by being used. Good first contributions: another
+OAuth provider, a Stripe-backed billing page to replace the demo plans, more list configs, an
+S3-compatible upload target, translations of the content pages. See
+[CONTRIBUTING.md](CONTRIBUTING.md) to get started — the whole test suite runs with two commands,
+so you'll know quickly whether your change holds.
 
-### Multi-tenancy
+If tstack saved you a week of plumbing, a ⭐ on the repo helps others find it.
 
-Tasks belong to an organization, never to a user. `requireOrg()` returns the active organization and
-its id goes into every `where` clause, including the ones on `updateMany`/`deleteMany` — a task id on
-its own never identifies a row, so a foreign id reads as "this no longer exists" instead of writing
-to somebody else's data.
+## License
 
-One subtlety: `getTasks` takes the organization id as an _argument_ even though the server ignores it.
-A remote query is cached by `(function, arguments)`, so without it the list would answer out of the
-previous organization's cache after a switch. It is a cache key, not an authorization argument.
-
-### Images
-
-`src/lib/server/upload.ts` runs every upload through [sharp](https://sharp.pixelplumbing.com) and
-writes a WebP in exactly the size its preset prescribes — so an avatar is 256×256 whether it arrived
-as a phone photo or a screenshot. The presets live in `config.json`, and `PresetName` makes a typo a
-type error rather than a 500.
-
-Files go to `UPLOAD_DIR`, which has to sit **outside** the app directory or a deployment wipes it; on
-Railway that means a mounted volume, e.g. `/data/uploads`. They are served by
-`src/routes/uploads/[...path]/+server.ts` rather than as static assets, which is also where the
-path-traversal check and the session gate (`uploads.requireSession`) live.
-
-### Email
-
-`src/lib/server/mail.ts` wraps [Resend](https://resend.com). Every message is the same shape — a
-heading, a line or two, and one button — so the call sites stay two lines and no message drifts away
-from the others. Without `RESEND_API_KEY` the message is printed to the terminal instead.
-
-### Configuration
-
-Two files, and the split matters: `src/lib/server/config.json` holds decisions (which providers are
-on, how long a session lasts, what an avatar should measure), `src/env.ts` holds secrets. The config
-only says _whether_ a feature is on; `auth.ts` checks at startup that the matching credentials
-actually exist and names the missing variable if they do not.
-
-## Theming
-
-Two daisyUI themes (`light`, `dark`) live in `src/lib/css/main.css`. `dark` is built from neutral greys rather than an inverted copy of `light` — a tinted dark surface makes everything on top of it look muddy. The active theme and the sidebar width are attributes on `<html>` (`data-theme`, `data-sidebar`), restored by an inline script in `app.html` before the first paint — a Svelte class would only land after hydration and flash the wrong theme. `theme-state.svelte.ts` and `sidebar-state.svelte.ts` own those attributes at runtime.
-
-One asymmetry is deliberate: `neutral` is a _dark_ tone in `light` and a _light_ one in `dark`, so `btn-neutral` keeps contrasting against the surface instead of dissolving into it.
-
-## Lists
-
-Every list goes through `DataTable` — the dashboard activity log, the members, the invoices and the task list. It owns the chrome (scrolling, header row, sort links, row hover, anchor targets); the page supplies the cells through a `row` snippet and the fallback through `empty`. Filtering follows one rule everywhere: the state lives in the URL, so a filtered view is shareable and survives a reload. `/crud` reads it back out of the database, `/members` filters a page-sized array in the browser — same contract, different source.
-
-## Toasts
-
-`toast.success('…')` from anywhere; the single `<Toaster />` in the root layout renders the stack through `Alert`, so a toast and an inline message never drift apart. See `src/lib/components/elements/toast-state.svelte.ts`.
-
-## The `/crud` demo
-
-Task list with search, filters, sorting and "load more" — the entire list state lives in the URL, so every view is shareable and works without JavaScript. It is the worked example of how a real feature sits in the app shell: `PageHeader` for the heading and its action, a `Card` around toolbar, table and pager, and `EmptyState` for both "nothing yet" and "nothing matches these filters". The pattern is reusable: a new listable model needs one config file next to `src/lib/helper/task.ts` and a remote query.
-
-Icons resolve against `src/lib/components/elements/icons.ts` — add a re-export line there before using a new icon name.
-
-`/components` shows every element with the props that produce each variant, and links to where each layout component can be seen in place.
-
-## Deploying to Railway
-
-`@sveltejs/adapter-node`, so `bun run build` and `node build/index.js`.
-
-Two things need attention beyond the usual environment variables:
-
-1. **Attach a volume** and point `UPLOAD_DIR` at its mount path, e.g. `/data/uploads`. Anything
-   inside the app directory is gone on the next deployment, along with every avatar and logo.
-2. **Set `BETTER_AUTH_URL`** to the public origin, and `ORIGIN` to the same value for
-   `adapter-node`'s CSRF check. Without the first, the app refuses to start rather than send
-   emails whose links go nowhere.
-
-`sharp` is a runtime dependency, not a dev one — `adapter-node` resolves it from `node_modules` at
-runtime, and it ships prebuilt binaries as platform-filtered optional dependencies. If a deployment
-ever reports `Could not load the "sharp" module using the linux-x64 runtime`, the lockfile was
-written on a machine that never saw the Linux entries; installing without `--frozen-lockfile` on the
-build machine fixes it.
-
-Migrations are not run by the build. Run `bunx prisma migrate deploy` as a release step.
+[MIT](LICENSE) — use it, fork it, ship your SaaS with it.

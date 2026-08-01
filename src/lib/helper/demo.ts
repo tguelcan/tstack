@@ -30,7 +30,7 @@ export const activity = [
 	{ id: 'a3', actor: 'System', action: 'ran the nightly backup', at: '6 hours ago' },
 	{
 		id: 'a4',
-		actor: 'Tayfun Gülcan',
+		actor: 'Alex Rivera',
 		action: 'changed the workspace plan to Team',
 		at: 'Yesterday'
 	}

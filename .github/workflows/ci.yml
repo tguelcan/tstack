@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'agents/**']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  quality:
+    name: Lint & type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Prettier & ESLint
+        run: bun run lint
+      - name: svelte-check
+        run: bun run check
+
+  unit:
+    name: Unit & component tests
+    runs-on: ubuntu-latest
+    env:
+      # `src/lib/server/auth.ts` validates its environment at import time; the
+      # unit tests never open a connection, so placeholder values are enough.
+      DATABASE_URL: postgresql://postgres@localhost:5432/placeholder
+      BETTER_AUTH_SECRET: ci-unit-tests-only
+      BETTER_AUTH_URL: http://localhost:5173
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Install Playwright Chromium
+        run: bunx playwright install --with-deps chromium
+      - name: Run tests
+        run: bun run test
+
+  integration:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          # Ephemeral throwaway database — trust auth instead of a password,
+          # which would only trip secret scanners.
+          POSTGRES_USER: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: tstack_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres@localhost:5432/tstack_test
+      BETTER_AUTH_SECRET: ci-integration-tests-only
+      # SvelteKit's post-build analysis imports the server bundle, which
+      # refuses to start without a public origin. The integration setup
+      # overrides this per test server anyway.
+      BETTER_AUTH_URL: http://localhost:4173
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Build
+        run: bun run build
+      - name: Run integration tests
+        run: bun run test:integration

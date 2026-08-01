@@ -75,7 +75,7 @@ const existing = await prisma.user.count();
 if (existing > 0) {
 	console.log(`Skipped — there are already ${existing} users.`);
 } else {
-	const owner = await createUser('Tayfun Gülcan', 'owner@example.com');
+	const owner = await createUser('Alex Rivera', 'owner@example.com');
 	const member = await createUser('Mara Lindqvist', 'mara@example.com');
 	const outsider = await createUser('Jonas Weber', 'jonas@example.com');
 

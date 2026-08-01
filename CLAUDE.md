@@ -4,6 +4,11 @@
 - **Package Manager**: bun
 - **Add-ons**: prettier, eslint, vitest, tailwindcss, sveltekit-adapter, experimental, mcp, mdsvex
 
+Read [AGENTS.md](AGENTS.md) first — it holds the project conventions, hard
+rules (guards, tenancy, remote functions) and the commands to run before a
+change counts as done. [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) explains
+the reasoning behind them.
+
 ---
 
 You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and SvelteKit documentation. Here's how to use the available tools effectively:

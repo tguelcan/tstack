@@ -1,4 +1,12 @@
+import { existsSync } from 'node:fs';
 import { defineConfig } from 'prisma/config';
+
+// Prisma 7 no longer loads `.env` itself once a config file exists, and the
+// CLI runs under Node even when invoked through bun — so load it here or
+// `bun run db:migrate` fails with "Connection url is empty" on a fresh clone.
+if (existsSync('.env')) {
+	process.loadEnvFile('.env');
+}
 
 export default defineConfig({
 	schema: 'prisma/schema.prisma',
