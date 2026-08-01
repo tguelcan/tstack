@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import { page } from '$app/state';
 	import Alert from '$components/elements/Alert.svelte';
 	import Button from '$components/elements/Button.svelte';
@@ -11,7 +12,7 @@
 	const token = $derived(page.url.searchParams.get('token') ?? '');
 </script>
 
-<svelte:head><title>Choose a new password · tstack</title></svelte:head>
+<PageTitle text="Choose a new password" />
 
 <AuthHeader title="Choose a new password" description="It has to be at least 8 characters long." />
 

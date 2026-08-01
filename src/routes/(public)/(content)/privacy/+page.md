@@ -1,4 +1,8 @@
-<svelte:head><title>Privacy policy · tstack</title></svelte:head>
+<script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
+</script>
+
+<PageTitle text="Privacy policy" />
 
 # Privacy policy
 

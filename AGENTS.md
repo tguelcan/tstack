@@ -45,9 +45,12 @@ pass.
    progressively-enhanced forms (`<form {...myForm}>`); list state lives in the
    URL. Do not reach for the Better Auth client — call `auth.api.*` on the
    server.
-5. **Secrets vs. decisions**: secrets are declared in `src/env.ts` and come from
-   the environment; feature decisions (providers, session length, upload
-   presets) live in `src/lib/server/config.json`.
+5. **Secrets vs. decisions vs. public**: secrets are declared in `src/env.ts`
+   and come from the environment; feature decisions (providers, session length,
+   upload presets) live in `src/lib/server/config.json`; what the browser may
+   see (app name, logo icon, navigation, marketing copy) lives in
+   `src/lib/config.json` and is imported as `$config`. Never put a secret in
+   the public one — it ships in the client bundle.
 6. **Schema changes need a migration**: edit `prisma/schema.prisma`, then
    `bun run db:migrate` — never `db push` against a shared database, and never
    edit committed migrations.
@@ -67,9 +70,9 @@ pass.
 - **Toasts** via `toast.success('…')` from
   `src/lib/components/elements/toast-state.svelte.ts`; there is one `<Toaster>`
   in the root layout.
-- **Aliases**: `$components`, `$server`, `$remotes`, `$helper`, `$assets`,
-  `$css`, `$generated` (see `vite.config.ts`). Route ids include the group:
-  `'/(app)/crud/[id]'`.
+- **Aliases**: `$components`, `$config`, `$server`, `$remotes`, `$helper`,
+  `$assets`, `$css`, `$generated` (see `vite.config.ts`). Route ids include the
+  group: `'/(app)/crud/[id]'`.
 - **Demo content** that is still template filler lives in
   `src/lib/helper/demo.ts` — when replacing it with real data, delete the
   export and follow the type errors.

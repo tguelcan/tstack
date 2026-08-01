@@ -64,6 +64,11 @@
 		</Button>
 	</Field>
 
+	<Field label="Pill shape" hint="rounded">
+		<Button color="primary" rounded>Rounded</Button>
+		<Button color="neutral" variant="outline" rounded arrowRight>Rounded outline</Button>
+	</Field>
+
 	<Field label="Full width" hint="block">
 		<Button color="primary" block>Block button</Button>
 	</Field>

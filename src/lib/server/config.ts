@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { config as publicConfig } from '$config';
 import raw from './config.json';
 
 /**
@@ -9,15 +10,15 @@ import raw from './config.json';
  * rest of the server can rely on. Parsing happens once, at import: a typo in the
  * config should stop the app at startup, not at the first login.
  *
+ * This file is server-only, so nothing in it reaches the browser. What the
+ * client needs — the app name, the navigation, the marketing copy — lives in
+ * `src/lib/config.json` and is re-exported below as `config.app`, so server code
+ * can keep reading `config.app.name` without knowing which file it came from.
+ *
  * Secrets stay out of here — they are declared in `src/env.ts` and read from the
  * environment. `config.json` only decides *whether* a feature is on;
  * `src/lib/server/auth.ts` checks that the matching credentials actually exist.
  */
-
-const AppSchema = z.object({
-	name: z.string().min(1),
-	version: z.string().optional()
-});
 
 const AuthSchema = z.object({
 	emailAndPassword: z.object({
@@ -92,17 +93,16 @@ const UploadsSchema = z.object({
 });
 
 const ConfigSchema = z.object({
-	app: AppSchema,
 	auth: AuthSchema,
 	mail: MailSchema,
 	uploads: UploadsSchema
 });
 
-export type AppConfig = z.infer<typeof AppSchema>;
 export type AuthConfig = z.infer<typeof AuthSchema>;
 export type MailConfig = z.infer<typeof MailSchema>;
 export type UploadsConfig = z.infer<typeof UploadsSchema>;
 export type ImagePreset = z.infer<typeof ImagePresetSchema>;
 export type PresetName = keyof UploadsConfig['presets'];
 
-export const config = ConfigSchema.parse(raw);
+/** Server decisions, plus the public `app` section so both read the same name. */
+export const config = { ...ConfigSchema.parse(raw), app: publicConfig.app };

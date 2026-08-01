@@ -27,8 +27,10 @@ commit is your product, not your plumbing.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset=".github/screenshots/dashboard-dark.png">
-  <img src=".github/screenshots/dashboard.png" alt="The tstack dashboard" width="100%">
+  <img src=".github/screenshots/dashboard.png" alt="The dashboard of a freshly cloned tstack, still under its placeholder name" width="100%">
 </picture>
+
+<sub>The screenshots show the template exactly as it clones — “MyApp” is the placeholder in `src/lib/config.json`, one line away from your own name.</sub>
 
 <details>
 <summary><strong>More screenshots</strong></summary>
@@ -80,10 +82,11 @@ password `demo-password`.
 
 ### Make it yours
 
-1. **Name it** — `app.name` in `src/lib/server/config.json`, plus `name` in `package.json`.
-2. **Brand it** — the logo in `src/lib/components/layout/Logo.svelte`, the two themes in `src/lib/css/main.css`.
-3. **Replace the demo content** — the dashboard figures and billing plans still come from `src/lib/helper/demo.ts`; delete an export there and follow the type errors.
-4. **Add your first model** — copy the `/crud` pattern: a Prisma model, a list config next to `src/lib/helper/task.ts`, a remote function, a page. [The architecture guide](docs/ARCHITECTURE.md) walks through it.
+1. **Name it** — `app.name` in `src/lib/config.json`, plus `name` in `package.json`. The logo, every page title, the footer and the workspace URL prefix read from there.
+2. **Brand it** — `app.icon` in the same file picks the logo mark (any name from `src/lib/components/elements/icons.ts`); the two themes live in `src/lib/css/main.css`.
+3. **Retell it** — the landing copy, the panel beside the sign-in form and the navigation sit in `src/lib/config.json` as well, so the public pages can be rewritten without touching a component.
+4. **Replace the demo content** — the dashboard figures and billing plans still come from `src/lib/helper/demo.ts`; delete an export there and follow the type errors.
+5. **Add your first model** — copy the `/crud` pattern: a Prisma model, a list config next to `src/lib/helper/task.ts`, a remote function, a page. [The architecture guide](docs/ARCHITECTURE.md) walks through it.
 
 ## Scripts
 

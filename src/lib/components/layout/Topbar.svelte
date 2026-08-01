@@ -14,7 +14,7 @@
 </script>
 
 <header
-	class="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b border-base-300 bg-base-100/80 px-4 backdrop-blur"
+	class="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 bg-base-100/50 px-4 backdrop-blur-xs"
 >
 	<!-- The label toggles the drawer checkbox in `AppShell`; it needs no script,
 	     which is why the mobile menu works before hydration. -->

@@ -16,6 +16,7 @@ export {
 	ArrowRight01Icon,
 	ArrowUp01Icon,
 	ArrowUpRight01Icon,
+	Asteroid02Icon,
 	Bookmark01Icon,
 	Building01Icon,
 	Calendar01Icon,

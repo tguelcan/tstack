@@ -23,6 +23,7 @@ export default defineConfig({
 				$css: 'src/lib/css/*',
 				$components: 'src/lib/components/*',
 				$assets: 'src/lib/assets/*',
+				$config: 'src/lib/config.ts',
 				$server: 'src/lib/server/*',
 				$remotes: 'src/lib/remotes/*',
 				$helper: 'src/lib/helper/*',

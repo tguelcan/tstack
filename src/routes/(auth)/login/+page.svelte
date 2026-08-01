@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import { page } from '$app/state';
 	import Alert from '$components/elements/Alert.svelte';
 	import Button from '$components/elements/Button.svelte';
@@ -17,7 +18,7 @@
 	const redirectTo = $derived(page.url.searchParams.get('redirectTo') ?? undefined);
 </script>
 
-<svelte:head><title>Sign in · tstack</title></svelte:head>
+<PageTitle text="Sign in" />
 
 <AuthHeader title="Welcome back" description="Sign in to continue to your workspace." />
 

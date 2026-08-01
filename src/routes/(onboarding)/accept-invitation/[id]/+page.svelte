@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import { page } from '$app/state';
 	import type { RouteParams } from '$app/types';
 	import Alert from '$components/elements/Alert.svelte';
@@ -19,7 +20,7 @@
 	const open = $derived(invitation?.status === 'pending' && invitation.expiresAt > new Date());
 </script>
 
-<svelte:head><title>Invitation · tstack</title></svelte:head>
+<PageTitle text="Invitation" />
 
 <!--
 	The page the link in the invitation email lands on. `getInvitation` answers

@@ -47,6 +47,8 @@
 		/** Ends up as the dialog's `returnValue` when the button closes it. */
 		value?: string;
 		block?: boolean | 'responsive';
+		/** Pill shape — full border radius on both ends. */
+		rounded?: boolean;
 		tooltip?: string;
 		tooltipPosition?: TooltipPosition;
 		responsive?: boolean;
@@ -78,6 +80,7 @@
 		commandfor,
 		value,
 		block,
+		rounded = false,
 		tooltip,
 		ariaLabel,
 		tooltipPosition = 'top',
@@ -129,6 +132,8 @@
 	);
 
 	const responsiveClass = $derived(responsive ? 'max-sm:btn-circle' : '');
+
+	const roundedClass = $derived(rounded ? 'rounded-full' : '');
 </script>
 
 {#snippet button()}
@@ -153,6 +158,7 @@
       {tooltipPositionMap[tooltipPosition]}
       {blockClass}
       {responsiveClass}
+      {roundedClass}
       {className}"
 		{href}
 		{target}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import Alert from '$components/elements/Alert.svelte';
 	import Button from '$components/elements/Button.svelte';
 	import Field from '$components/elements/Field.svelte';
@@ -9,7 +10,7 @@
 	import SocialSignIn from '../SocialSignIn.svelte';
 </script>
 
-<svelte:head><title>Create account · tstack</title></svelte:head>
+<PageTitle text="Create account" />
 
 <AuthHeader title="Create your account" description="Free to start, no card required." />
 

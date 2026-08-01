@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import Badge from '$components/elements/Badge.svelte';
 	import Button from '$components/elements/Button.svelte';
 	import Card from '$components/elements/Card.svelte';
@@ -8,7 +9,7 @@
 	import { invoices, plans } from '$helper/demo';
 </script>
 
-<svelte:head><title>Billing · tstack</title></svelte:head>
+<PageTitle text="Billing" />
 
 <!-- No `PageHeader` of its own: the settings layout already renders one above
      the tabs, and a second heading would compete with it. -->

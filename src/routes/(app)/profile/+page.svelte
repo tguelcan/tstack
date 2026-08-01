@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import { page } from '$app/state';
 	import Alert from '$components/elements/Alert.svelte';
 	import Avatar from '$components/elements/Avatar.svelte';
@@ -34,7 +35,7 @@
 	);
 </script>
 
-<svelte:head><title>Profile · tstack</title></svelte:head>
+<PageTitle text="Profile" />
 
 <PageHeader title="Profile" description="How you appear to the rest of the workspace." />
 

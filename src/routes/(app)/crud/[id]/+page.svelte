@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import { page } from '$app/state';
 	import type { RouteParams } from '$app/types';
 	import Button from '$components/elements/Button.svelte';
@@ -33,7 +34,7 @@
 		});
 </script>
 
-<svelte:head><title>{task?.description ?? 'Task not found'} · tstack</title></svelte:head>
+<PageTitle text={task?.description ?? 'Task not found'} />
 
 <Button href={back} color="ghost" size="sm" arrowLeft class="mb-4">Back to tasks</Button>
 

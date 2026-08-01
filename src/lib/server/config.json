@@ -1,8 +1,4 @@
 {
-	"app": {
-		"name": "MyApp",
-		"version": "0.1.0"
-	},
 	"auth": {
 		"emailAndPassword": {
 			"enabled": true,

@@ -23,7 +23,7 @@
      rules in `main.css` target; see the comment there for why this is CSS and not
      a Svelte class. -->
 <aside
-	class="sidebar-panel flex h-full w-72 flex-col border-r border-base-300 bg-base-100 transition-[width] duration-200 lg:w-64"
+	class="sidebar-panel flex h-full w-72 flex-col bg-base-100 transition-[width] duration-200 lg:w-64"
 >
 	<div class="flex h-16 shrink-0 items-center px-4">
 		<Logo labelClass="sidebar-label" />
@@ -69,7 +69,7 @@
 
 	<!-- Collapsing only exists on the desktop layout; below `lg` the sidebar is an
 	     off-canvas drawer that is either open or gone. -->
-	<div class="hidden shrink-0 border-t border-base-300 p-3 lg:block">
+	<div class="hidden shrink-0 p-3 lg:block">
 		<button
 			type="button"
 			class="sidebar-item btn w-full justify-start gap-3 btn-ghost btn-sm"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import Alert from '$components/elements/Alert.svelte';
 	import Button from '$components/elements/Button.svelte';
 	import Card from '$components/elements/Card.svelte';
@@ -12,7 +13,7 @@
 	const fields = $derived(updateNotificationSettings.fields);
 </script>
 
-<svelte:head><title>Notifications · tstack</title></svelte:head>
+<PageTitle text="Notifications" />
 
 <!--
 	One form around both cards, so "Save preferences" saves everything on the page

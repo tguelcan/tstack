@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import Button from '$components/elements/Button.svelte';
@@ -31,7 +32,7 @@
 	const filtered = $derived(!!page.url.search);
 </script>
 
-<svelte:head><title>Tasks · tstack</title></svelte:head>
+<PageTitle text="Tasks" />
 
 <PageHeader title="Tasks" description="Everything this workspace still has on its plate.">
 	{#snippet actions()}
@@ -49,7 +50,7 @@
 </PageHeader>
 
 <Card flush>
-	<div class="border-b border-base-300 px-4 py-3 sm:px-5">
+	<div class="px-4 py-3 sm:px-5">
 		<ListToolbar
 			q={params.q}
 			placeholder="Search descriptions…"

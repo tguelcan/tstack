@@ -1,4 +1,8 @@
-<svelte:head><title>Imprint · tstack</title></svelte:head>
+<script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
+</script>
+
+<PageTitle text="Imprint" />
 
 # Imprint
 

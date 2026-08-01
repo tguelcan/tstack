@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import { page } from '$app/state';
 	import Alert from '$components/elements/Alert.svelte';
 	import Avatar from '$components/elements/Avatar.svelte';
@@ -57,7 +58,7 @@
 	const manageId = (id: string) => `manage-${id}`;
 </script>
 
-<svelte:head><title>Members · tstack</title></svelte:head>
+<PageTitle text="Members" />
 
 <PageHeader title="Members" description="Who has access to {workspace.organization.name}.">
 	{#snippet actions()}
@@ -78,7 +79,7 @@
 
 <div class="grid gap-4">
 	<Card flush>
-		<div class="border-b border-base-300 px-4 py-3 sm:px-5">
+		<div class="px-4 pt-3 sm:px-5">
 			<ListToolbar
 				{q}
 				placeholder="Search name or email…"

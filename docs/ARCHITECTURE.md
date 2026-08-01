@@ -9,7 +9,7 @@ patterns below are the ones the rest of the code already follows.
 - **`src/lib/server/`** — server-only modules: the Better Auth instance (`auth.ts`), authorization for remote functions (`guard.ts`), Prisma client (`db.ts`), list→Prisma translation (`list.ts`), transactional email (`mail.ts`), image processing (`upload.ts`), and the parsed `config.json` (`config.ts`).
 - **`src/lib/helper/`** — shared, pure helpers: URL-driven list state (`list.ts`), per-model list configs (`task.ts`), form utilities (`form.ts`), formatters and `slugify`/`describeUserAgent` (`format.ts`), placeholder content for the pages that are still a template (`demo.ts`). Unit-tested via colocated `*.spec.ts`.
 - **`src/lib/components/elements/`** — reusable UI building blocks (`Button`, `Badge`, `Card`, `DataTable`, `StatCard`, `Alert`, `EmptyState`, `Field`, `Switch`, `Tabs`, `Modal`, `Toaster`, `Icon`, `Avatar`, list widgets). New elements go here.
-- **`src/lib/components/layout/`** — page chrome: `AppShell`, `Sidebar`, `Topbar`, `UserMenu`, `PageHeader`, `BrandPanel`, `Footer`, `Logo`, `ThemeToggle`, plus the navigation config and the two state modules.
+- **`src/lib/components/layout/`** — page chrome: `AppShell`, `Sidebar`, `Topbar`, `UserMenu`, `PageHeader`, `PageTitle`, `BrandPanel`, `Footer`, `Logo`, `ThemeToggle`, plus the navigation config and the two state modules.
 - **`src/generated/`** — Prisma client output; gitignored, recreated by `db:generate`.
 - **`src/hooks.server.ts`** — puts the session on `locals` and redirects page navigations. Explicitly _not_ the authorization boundary; see [Auth](#auth) below.
 - **`src/env.ts`** — explicit [environment variable](https://svelte.dev/docs/kit/environment-variables) declarations. Secrets only; what is a decision rather than a secret lives in `src/lib/server/config.json`.
@@ -18,13 +18,14 @@ patterns below are the ones the rest of the code already follows.
 
 The SaaS scaffolding is split into [route groups](https://svelte.dev/docs/kit/advanced-routing#Advanced-layouts), so each area brings its own layout without showing up in the URL:
 
-| Group          | Routes                                                                        | Layout                                     |
-| -------------- | ----------------------------------------------------------------------------- | ------------------------------------------ |
-| `(auth)`       | `/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password` | Form on the left, brand panel from `lg` up |
-| `(onboarding)` | `/onboarding`, `/accept-invitation/[id]`                                      | A single centred column                    |
-| `(app)`        | `/dashboard`, `/crud/*`, `/members`, `/profile`, `/settings/*`                | `AppShell`: collapsible sidebar + topbar   |
-| `(content)`    | `/privacy`, `/terms`, `/imprint` — written as `+page.md`                      | Prose column with header and footer        |
-| —              | `/`, `/components`, `/api/auth/*`, `/uploads/*`                               | Own layouts, or none                       |
+| Group          | Routes                                                                        | Layout                                                |
+| -------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `(auth)`       | `/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password` | Form and footer on the left, brand panel from `lg` up |
+| `(onboarding)` | `/onboarding`, `/accept-invitation/[id]`                                      | A single centred column                               |
+| `(app)`        | `/dashboard`, `/crud/*`, `/members`, `/profile`, `/settings/*`                | `AppShell`: collapsible sidebar + topbar              |
+| `(public)`     | `/`, `/components`, and `(content)` nested inside                             | Shared header and footer for the site                 |
+| `(content)`    | `/privacy`, `/terms`, `/imprint` — written as `+page.md`                      | Prose column inside `(public)`                        |
+| —              | `/api/auth/*`, `/uploads/*`                                                   | None                                                  |
 
 Everything under `(auth)`, `(onboarding)` and `(app)` reads real data. What is left of the
 template is the dashboard's figures and the billing plans, which still come from
@@ -95,10 +96,24 @@ from the others. Without `RESEND_API_KEY` the message is printed to the terminal
 
 ### Configuration
 
-Two files, and the split matters: `src/lib/server/config.json` holds decisions (which providers are
-on, how long a session lasts, what an avatar should measure), `src/env.ts` holds secrets. The config
-only says _whether_ a feature is on; `auth.ts` checks at startup that the matching credentials
-actually exist and names the missing variable if they do not.
+Three files, and the split matters:
+
+| File                         | Holds                                                                                | Reaches the browser |
+| ---------------------------- | ------------------------------------------------------------------------------------ | ------------------- |
+| `src/lib/config.json`        | What the app is called and says: name, logo icon, navigation, marketing copy         | Yes                 |
+| `src/lib/server/config.json` | Decisions: which providers are on, how long a session lasts, what an avatar measures | No                  |
+| `src/env.ts`                 | Secrets, read from the environment                                                   | No                  |
+
+The public half is imported as `$config` by components — the logo, the footer, the sidebar and
+`PageTitle` all read it, so renaming the app is one line in one file. Put nothing in there that
+should stay on the server; it ships in the client bundle.
+
+The server half only says _whether_ a feature is on; `auth.ts` checks at startup that the matching
+credentials actually exist and names the missing variable if they do not. It re-exports the public
+`app` section, so server code reads `config.app.name` without caring which file it came from.
+
+Both are parsed with zod at import, so a typo stops the app rather than surfacing as an empty
+heading in production.
 
 ## Theming
 

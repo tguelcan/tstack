@@ -24,11 +24,11 @@
 <div class="drawer lg:drawer-open">
 	<input id="app-drawer" type="checkbox" class="drawer-toggle" bind:checked={drawerOpen} />
 
-	<div class="drawer-content flex min-h-screen flex-col bg-base-200/50">
+	<div class="drawer-content flex min-h-screen flex-col">
 		<Topbar name={user.name} email={user.email} avatar={user.image} />
 
 		<main class="flex-1 px-4 py-6 sm:px-6">
-			<div class="mx-auto w-full max-w-6xl">{@render children()}</div>
+			<div class="w-full">{@render children()}</div>
 		</main>
 	</div>
 

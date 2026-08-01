@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import Alert from '$components/elements/Alert.svelte';
 	import Avatar from '$components/elements/Avatar.svelte';
 	import Badge from '$components/elements/Badge.svelte';
@@ -6,6 +7,7 @@
 	import Card from '$components/elements/Card.svelte';
 	import Field from '$components/elements/Field.svelte';
 	import { rootIssues } from '$helper/form';
+	import { config } from '$config';
 	import {
 		acceptInvitation,
 		createOrganization,
@@ -19,7 +21,7 @@
 	const organizations = $derived(await getMyOrganizations());
 </script>
 
-<svelte:head><title>Set up your workspace · tstack</title></svelte:head>
+<PageTitle text="Set up your workspace" />
 
 <div class="mb-8">
 	<h1 class="text-2xl font-semibold">Set up your workspace</h1>
@@ -132,7 +134,7 @@
 				>
 					{#snippet children({ invalid })}
 						<label class={['input', invalid && 'input-error']}>
-							<span class="text-muted">tstack.app/</span>
+							<span class="text-muted">{config.app.workspaceDomain}/</span>
 							<input
 								aria-label="Organization address"
 								{...createOrganization.fields.slug.as('text')}

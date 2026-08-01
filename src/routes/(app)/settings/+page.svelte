@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import Alert from '$components/elements/Alert.svelte';
 	import Avatar from '$components/elements/Avatar.svelte';
 	import Button from '$components/elements/Button.svelte';
@@ -6,6 +7,7 @@
 	import Field from '$components/elements/Field.svelte';
 	import Modal from '$components/elements/Modal.svelte';
 	import { rootIssues } from '$helper/form';
+	import { config } from '$config';
 	import {
 		deleteOrganization,
 		getWorkspace,
@@ -24,7 +26,7 @@
 	);
 </script>
 
-<svelte:head><title>Settings · tstack</title></svelte:head>
+<PageTitle text="Settings" />
 
 <div class="grid gap-4">
 	{#if !canEdit}
@@ -84,7 +86,7 @@
 				>
 					{#snippet children({ invalid })}
 						<label class={['input', invalid && 'input-error']}>
-							<span class="text-muted">tstack.app/</span>
+							<span class="text-muted">{config.app.workspaceDomain}/</span>
 							<input
 								aria-label="Organization address"
 								{...updateOrganization.fields.slug.as('text', workspace.organization.slug)}

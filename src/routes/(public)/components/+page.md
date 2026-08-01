@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import ButtonsDemo from './ButtonsDemo.svelte';
 	import BadgesDemo from './BadgesDemo.svelte';
 	import AvatarsDemo from './AvatarsDemo.svelte';
@@ -12,12 +13,12 @@
 	import ToastDemo from './ToastDemo.svelte';
 </script>
 
-<svelte:head><title>Components · tstack</title></svelte:head>
+<PageTitle text="Components" />
 
 # Components
 
 The elements from `src/lib/components/elements`, each shown with the prop that produces the
-variant. Everything here works in both themes — the toggle in the header is the quickest way to
+variant. Everything here works in both themes — the toggle in the footer is the quickest way to
 check.
 
 ## Buttons
@@ -99,8 +100,8 @@ demo box:
 | `AppShell`, `Sidebar`, `Topbar`, `UserMenu` | [/dashboard](/dashboard) — collapse the sidebar with the button at its foot |
 | `PageHeader`                                | Top of every [app page](/team)                                              |
 | `BrandPanel`                                | Right-hand side of [/login](/login)                                         |
-| `Footer`, `Logo`                            | Bottom of this page                                                         |
-| `ThemeToggle`                               | Header of this page                                                         |
+| `Footer`, `Logo`                            | Bottom of this page, and of every auth screen                               |
+| `ThemeToggle`                               | In the footer, next to the copyright                                        |
 
 `navigation.ts` in the same folder holds the sidebar and footer entries as data, so the desktop
 sidebar and the mobile drawer cannot drift apart.

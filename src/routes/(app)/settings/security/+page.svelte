@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import Alert from '$components/elements/Alert.svelte';
 	import Badge from '$components/elements/Badge.svelte';
 	import Button from '$components/elements/Button.svelte';
@@ -30,7 +31,7 @@
 	const others = $derived(sessions.filter((session) => !session.current));
 </script>
 
-<svelte:head><title>Security · tstack</title></svelte:head>
+<PageTitle text="Security" />
 
 <div class="grid gap-4">
 	{#if account.hasPassword}

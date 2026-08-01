@@ -1,49 +1,18 @@
 /**
  * Navigation of the app shell and the public footer.
  *
- * Kept as data rather than markup, so the sidebar, the mobile drawer and any
- * future command palette all read the same list.
+ * The lists themselves live in `src/lib/config.json` so they can be changed
+ * without touching code; this module re-exports them under the names the
+ * components already use and adds the one piece of logic they need.
  */
 
-export type NavItem = {
-	href: string;
-	label: string;
-	/** Name from `elements/icons.ts`. */
-	icon: string;
-};
+import { config } from '$config';
 
-export type NavSection = {
-	label: string;
-	items: NavItem[];
-};
+export type { NavItem, NavSection } from '$config';
 
-export const appNavigation: NavSection[] = [
-	{
-		label: 'Workspace',
-		items: [
-			{ href: '/dashboard', label: 'Dashboard', icon: 'DashboardSquare01Icon' },
-			{ href: '/crud', label: 'Tasks', icon: 'Task01Icon' },
-			{ href: '/members', label: 'Members', icon: 'UserGroupIcon' }
-		]
-	},
-	{
-		label: 'Account',
-		items: [
-			{ href: '/profile', label: 'Profile', icon: 'User02Icon' },
-			{ href: '/settings', label: 'Settings', icon: 'Settings01Icon' }
-		]
-	},
-	{
-		label: 'Reference',
-		items: [{ href: '/components', label: 'Components', icon: 'Layers01Icon' }]
-	}
-];
+export const appNavigation = config.navigation.app;
 
-export const legalNavigation: { href: string; label: string }[] = [
-	{ href: '/privacy', label: 'Privacy' },
-	{ href: '/terms', label: 'Terms' },
-	{ href: '/imprint', label: 'Imprint' }
-];
+export const legalNavigation = config.navigation.legal;
 
 /**
  * Whether `href` is the section the visitor is currently in.

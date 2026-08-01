@@ -1,26 +1,12 @@
 <script lang="ts">
 	import Icon from '$components/elements/Icon.svelte';
 	import Logo from './Logo.svelte';
+	import { config } from '$config';
 
-	// Three lines of proof next to the form. Kept here rather than in the pages,
-	// so all four auth screens make the same promise.
-	const highlights = [
-		{
-			icon: 'RocketIcon',
-			title: 'Ship on day one',
-			text: 'Routing, forms and validation are wired up and work without JavaScript.'
-		},
-		{
-			icon: 'Shield01Icon',
-			title: 'Safe by default',
-			text: 'Every mutation goes through a typed remote function on the server.'
-		},
-		{
-			icon: 'Layers01Icon',
-			title: 'Yours to shape',
-			text: 'A handful of elements and a theme — no framework on top of the framework.'
-		}
-	];
+	// Three lines of proof next to the form. They live in `config.json`, so all
+	// four auth screens make the same promise and it can be retold without
+	// touching this component.
+	const { headline, highlights } = config.content.authPanel;
 </script>
 
 <!-- Decoration only: the form on the other side carries the whole flow, so this
@@ -35,12 +21,14 @@
 		aria-hidden="true"
 	></div>
 
-	<div class="relative flex flex-col justify-between p-10 xl:p-14">
+	<div class="relative flex flex-col p-10 xl:p-14">
 		<Logo href="/" class="text-secondary-content" />
 
-		<div class="max-w-md py-12">
+		<!-- `my-auto` keeps this centred in what is left below the logo; the
+		     copyright lives in the footer the form column carries. -->
+		<div class="my-auto max-w-md py-12">
 			<p class="text-3xl leading-tight font-semibold text-balance">
-				The boring parts of a SaaS, already built.
+				{headline}
 			</p>
 
 			<ul class="mt-10 space-y-6">
@@ -57,7 +45,5 @@
 				{/each}
 			</ul>
 		</div>
-
-		<p class="text-sm opacity-60">© {new Date().getFullYear()} tstack</p>
 	</div>
 </aside>

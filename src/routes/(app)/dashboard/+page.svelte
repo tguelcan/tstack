@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import Avatar from '$components/elements/Avatar.svelte';
 	import Badge from '$components/elements/Badge.svelte';
 	import Button from '$components/elements/Button.svelte';
@@ -10,7 +11,7 @@
 	import { activity, dashboardStats } from '$helper/demo';
 </script>
 
-<svelte:head><title>Dashboard · tstack</title></svelte:head>
+<PageTitle text="Dashboard" />
 
 <PageHeader title="Dashboard" description="What happened in your workspace this week.">
 	{#snippet actions()}

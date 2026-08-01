@@ -2,6 +2,7 @@
 	import FieldElement from '$components/elements/Field.svelte';
 	import Switch from '$components/elements/Switch.svelte';
 	import Field from './Field.svelte';
+	import { config } from '$config';
 
 	let notify = $state(true);
 	let publicWorkspace = $state(false);
@@ -47,7 +48,7 @@
 			<FieldElement label="URL" issues={[{ message: 'This slug is taken' }]}>
 				{#snippet children({ invalid })}
 					<label class={['input', invalid && 'input-error']}>
-						<span class="text-muted">tstack.app/</span>
+						<span class="text-muted">{config.app.workspaceDomain}/</span>
 						<input
 							aria-label="Workspace URL"
 							type="text"

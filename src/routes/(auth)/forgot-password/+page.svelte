@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import { page } from '$app/state';
 	import Alert from '$components/elements/Alert.svelte';
 	import Button from '$components/elements/Button.svelte';
@@ -10,7 +11,7 @@
 	const sent = $derived(page.url.searchParams.has('sent'));
 </script>
 
-<svelte:head><title>Reset password · tstack</title></svelte:head>
+<PageTitle text="Reset password" />
 
 <AuthHeader
 	title="Forgot your password?"

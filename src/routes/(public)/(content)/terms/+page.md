@@ -1,4 +1,8 @@
-<svelte:head><title>Terms of service · tstack</title></svelte:head>
+<script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
+</script>
+
+<PageTitle text="Terms of service" />
 
 # Terms of service
 

@@ -58,15 +58,10 @@
 	]}
 >
 	{#if hasHeader}
-		<header
-			class={[
-				'flex items-start justify-between gap-4 px-5 pt-5',
-				flush && 'border-b border-base-300 pb-5'
-			]}
-		>
+		<header class={['flex items-start justify-between gap-4 px-5 pt-5']}>
 			<div class="flex min-w-0 items-start gap-2.5">
 				{#if icon}
-					<span class={['mt-0.5 shrink-0', tone ? iconMap[tone] : 'text-base-content/40']}>
+					<span class={['mt-1 shrink-0', tone ? iconMap[tone] : 'text-base-content/40']}>
 						<Icon name={icon} size={18} />
 					</span>
 				{/if}
@@ -92,7 +87,7 @@
 	{/if}
 
 	{#if footer}
-		<footer class="flex items-center justify-end gap-2 border-t border-base-300 px-5 py-4">
+		<footer class="flex items-center justify-end gap-2 px-5 pb-4">
 			{@render footer()}
 		</footer>
 	{/if}

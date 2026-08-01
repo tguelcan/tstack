@@ -164,7 +164,10 @@ export const getMembers = query(async () => {
 });
 
 export const createOrganization = form(
-	z.object({ name: nameSchema, slug: slugSchema.optional(), logo: imageSchema }),
+	// An empty text input submits `''`, not nothing — the onboarding form promises
+	// "leave it empty", so an empty slug must pass validation and fall through to
+	// the derived address below.
+	z.object({ name: nameSchema, slug: slugSchema.or(z.literal('')).optional(), logo: imageSchema }),
 	async ({ name, slug, logo }, issue) => {
 		await requireUser();
 

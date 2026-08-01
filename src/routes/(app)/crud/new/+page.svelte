@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from '$components/layout/PageTitle.svelte';
 	import { page } from '$app/state';
 	import Button from '$components/elements/Button.svelte';
 	import Card from '$components/elements/Card.svelte';
@@ -25,7 +26,7 @@
 		});
 </script>
 
-<svelte:head><title>New task · tstack</title></svelte:head>
+<PageTitle text="New task" />
 
 <Button href={back} color="ghost" size="sm" arrowLeft class="mb-4">Back to tasks</Button>
 
