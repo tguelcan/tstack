@@ -6,6 +6,7 @@ import { prisma } from '$server/db';
 import { fail, requestHeaders, requireUser } from '$server/guard';
 import { emailSchema, passwordSchema, personNameSchema } from '$server/schemas';
 import { deleteImage, storeImageField } from '$server/upload';
+import { getWorkspace } from './organization.remote';
 
 /**
  * The account: profile, sign-in methods, sessions, notification preferences.
@@ -88,6 +89,13 @@ export const updateProfile = form(
 		} catch (error) {
 			fail(error, 'Could not save your profile.');
 		}
+
+		// Single-flight refresh, so the fields reset to what was just saved. The
+		// default invalidation only lands a round trip later, and until then the
+		// form would show the previous name. `getWorkspace` carries the same user
+		// for the sidebar and the avatar in the topbar.
+		void getAccount().refresh();
+		void getWorkspace().refresh();
 	}
 );
 

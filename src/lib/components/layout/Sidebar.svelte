@@ -78,7 +78,7 @@
 			title={sidebar.collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
 		>
 			<span class={['inline-flex transition-transform', sidebar.collapsed && 'rotate-180']}>
-				<Icon name="SidebarLeft01Icon" size={18} />
+				<Icon name="ArrowLeft01Icon" size={18} />
 			</span>
 			<span class="sidebar-label">Collapse</span>
 		</button>

@@ -32,9 +32,6 @@ commit is your product, not your plumbing.
 
 <sub>The screenshots show the template exactly as it clones — “MyApp” is the placeholder in `src/lib/config.json`, one line away from your own name.</sub>
 
-<details>
-<summary><strong>More screenshots</strong></summary>
-
 |                                   Sign in                                   |                           Tasks (the CRUD example)                           |
 | :-------------------------------------------------------------------------: | :--------------------------------------------------------------------------: |
 |               ![Sign-in page](.github/screenshots/login.png)                | ![Task list with search, filters and sorting](.github/screenshots/tasks.png) |
@@ -43,8 +40,6 @@ commit is your product, not your plumbing.
 **Component gallery** — every element ships with a live reference page at `/components`:
 
 ![Component gallery in dark mode](.github/screenshots/components-dark.png)
-
-</details>
 
 ## What's inside
 

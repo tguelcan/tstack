@@ -117,7 +117,7 @@ heading in production.
 
 ## Theming
 
-Two daisyUI themes (`light`, `dark`) live in `src/lib/css/main.css`. `dark` is built from neutral greys rather than an inverted copy of `light` — a tinted dark surface makes everything on top of it look muddy. The active theme and the sidebar width are attributes on `<html>` (`data-theme`, `data-sidebar`), restored by an inline script in `app.html` before the first paint — a Svelte class would only land after hydration and flash the wrong theme. `theme-state.svelte.ts` and `sidebar-state.svelte.ts` own those attributes at runtime.
+Two daisyUI themes (`light`, `dark`) live in `src/lib/css/main.css`. `dark` is built from neutral greys rather than an inverted copy of `light` — a tinted dark surface makes everything on top of it look muddy. The active theme and the sidebar width are attributes on `<html>` (`data-theme`, `data-sidebar`), restored by an inline script in `app.html` before the first paint — a Svelte class would only land after hydration and flash the wrong theme. `theme-state.svelte.ts` and `sidebar-state.svelte.ts` own those attributes at runtime. Visitors flip the theme with the `ThemeToggle` in the public footer; inside the app it is a switch under Settings → General, because a preference that only lives in one browser reads better next to the other settings than as a permanent button in the topbar.
 
 One asymmetry is deliberate: `neutral` is a _dark_ tone in `light` and a _light_ one in `dark`, so `btn-neutral` keeps contrasting against the surface instead of dissolving into it.
 

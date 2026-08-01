@@ -263,6 +263,12 @@ export const updateOrganization = form(
 		// Only once the new value is safely stored — otherwise a failed save would
 		// leave a row pointing at a file that is no longer there.
 		if (next !== undefined) await deleteImage(current?.logo);
+
+		// A single-flight refresh: the fresh workspace travels back with this very
+		// response. Without it the form resets to the value `as('text', …)` was
+		// rendered with — the *old* name — because the default invalidation only
+		// lands a round trip later, leaving the field a step behind the sidebar.
+		void getWorkspace().refresh();
 	}
 );
 

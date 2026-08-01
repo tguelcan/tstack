@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Button from '$components/elements/Button.svelte';
 	import Icon from '$components/elements/Icon.svelte';
-	import ThemeToggle from './ThemeToggle.svelte';
 	import UserMenu from './UserMenu.svelte';
 
 	type Props = {
@@ -35,8 +34,6 @@
 	</form>
 
 	<div class="flex flex-1 items-center justify-end gap-1 md:flex-none">
-		<ThemeToggle />
-
 		<Button
 			href="/dashboard"
 			color="ghost"

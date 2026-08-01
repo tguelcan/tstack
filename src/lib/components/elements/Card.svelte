@@ -50,9 +50,13 @@
 	};
 </script>
 
+<!-- `min-w-0` matters: as a grid or flex item the card would otherwise refuse to
+     shrink below the min-content width of its contents, and a wide table inside
+     would push the whole page into a horizontal scroll instead of scrolling
+     within its own `overflow-x-auto`. -->
 <section
 	class={[
-		'not-prose card border bg-base-100',
+		'not-prose card min-w-0 border bg-base-100',
 		tone ? borderMap[tone] : 'border-base-300',
 		className
 	]}
