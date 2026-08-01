@@ -2,6 +2,13 @@
 @plugin '@tailwindcss/typography';
 @plugin 'daisyui';
 
+/*
+ * `dark:` has to follow the theme the visitor picked, not their operating
+ * system. Tailwind's built-in variant keys off `prefers-color-scheme`, which
+ * says nothing about the `data-theme` attribute this app actually switches on.
+ */
+@custom-variant dark ([data-theme='dark'] &);
+
 @plugin 'daisyui/theme' {
 	name: 'light';
 	color-scheme: 'light';

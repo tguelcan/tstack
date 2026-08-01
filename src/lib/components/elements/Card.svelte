@@ -53,11 +53,17 @@
 <!-- `min-w-0` matters: as a grid or flex item the card would otherwise refuse to
      shrink below the min-content width of its contents, and a wide table inside
      would push the whole page into a horizontal scroll instead of scrolling
-     within its own `overflow-x-auto`. -->
+     within its own `overflow-x-auto`.
+
+     Light theme lifts the surface with a shadow; dark theme draws a hairline
+     instead, because a shadow on a dark background reads as mud. A `tone` keeps
+     its coloured outline in both — that border carries meaning, not depth. -->
 <section
 	class={[
-		'not-prose card min-w-0 shadow-sm',
-		tone ? borderMap[tone] : 'border-base-300',
+		'not-prose card min-w-0 bg-base-100',
+		tone
+			? ['border', borderMap[tone]]
+			: 'shadow-sm dark:border dark:border-base-300 dark:shadow-none',
 		className
 	]}
 >

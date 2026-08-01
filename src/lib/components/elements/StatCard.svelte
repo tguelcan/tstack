@@ -22,7 +22,14 @@
 	const direction = $derived(delta === undefined || delta === 0 ? 0 : delta > 0 ? 1 : -1);
 </script>
 
-<div class={['not-prose card border border-base-300 bg-base-100 p-5', className]}>
+<!-- Same surface treatment as `Card`: a shadow in the light theme, a hairline in
+     the dark one. -->
+<div
+	class={[
+		'not-prose card bg-base-100 p-5 shadow-sm dark:border dark:border-base-300 dark:shadow-none',
+		className
+	]}
+>
 	<div class="flex items-start justify-between gap-3">
 		<p class="text-muted text-sm">{label}</p>
 		{#if icon}

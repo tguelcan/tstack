@@ -48,18 +48,25 @@
 		{/each}
 
 		<li class="mt-1 border-t border-base-300 pt-1">
-			<!-- A form, not a link: signing out clears a cookie, and a GET that does
-			     that would fire on every link prefetch. -->
-			<form {...signOut}>
-				<button
-					type="submit"
-					class="flex w-full items-center gap-3 text-left text-error"
-					onclick={closeDropdown}
-				>
-					<Icon name="Logout01Icon" size={16} />
-					Sign out
-				</button>
-			</form>
+			<!-- The button is the `<li>`'s direct child, like the links above, so
+			     daisyUI's menu padding lands on it and the whole row is clickable.
+			     With the `<form>` in between, the row was a grid whose column hugged
+			     the label — everything outside those ~81px did nothing. The form
+			     therefore sits outside the menu and is reached by `form=`, which is
+			     plain HTML and submits without JavaScript too. -->
+			<button
+				type="submit"
+				form="user-menu-sign-out"
+				class="gap-3 text-error"
+				onclick={closeDropdown}
+			>
+				<Icon name="Logout01Icon" size={16} />
+				Sign out
+			</button>
 		</li>
 	</ul>
 </div>
+
+<!-- A form, not a link: signing out clears a cookie, and a GET that does that
+     would fire on every link prefetch. -->
+<form {...signOut} id="user-menu-sign-out"></form>
