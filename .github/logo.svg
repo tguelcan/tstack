@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+	<title>tstack</title>
+	<rect width="512" height="512" rx="112" fill="#0E6F5C" />
+	<g fill="none" stroke="#F7F8F2" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
+		<path d="M256 118 L412 194 L256 270 L100 194 Z" />
+		<path d="M100 266 L256 342 L412 266" />
+		<path d="M100 338 L256 414 L412 338" />
+	</g>
+</svg>

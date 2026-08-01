@@ -2,6 +2,33 @@
 	"name": "tstack",
 	"private": true,
 	"version": "0.0.1",
+	"description": "SvelteKit SaaS boilerplate — Better Auth with organizations and multi-tenancy, Prisma 7 (Postgres), Tailwind 4 + daisyUI 5, transactional email, image uploads, tests and one-click Railway deploy.",
+	"keywords": [
+		"sveltekit",
+		"svelte",
+		"svelte5",
+		"saas",
+		"boilerplate",
+		"starter",
+		"template",
+		"prisma",
+		"postgresql",
+		"tailwindcss",
+		"daisyui",
+		"better-auth",
+		"multi-tenancy",
+		"bun",
+		"typescript"
+	],
+	"homepage": "https://github.com/tguelcan/tstack#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tguelcan/tstack.git"
+	},
+	"bugs": {
+		"url": "https://github.com/tguelcan/tstack/issues"
+	},
+	"author": "Tayfun Gülcan",
 	"license": "MIT",
 	"type": "module",
 	"scripts": {

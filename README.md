@@ -1,15 +1,15 @@
 <div align="center">
 
-<img src="src/lib/assets/favicon.svg" alt="tstack" width="64" height="64">
+<img src=".github/logo.svg" alt="tstack" width="72" height="72">
 
 # tstack
 
 **The boring parts of a SaaS, already built.**
 
-A production-minded SvelteKit boilerplate: authentication, organizations,
-multi-tenancy, transactional email, image uploads, a themed component library
-and a worked CRUD example — so your first commit is your product, not your
-plumbing.
+A free, open-source **SvelteKit SaaS boilerplate / starter template**:
+authentication, organizations, multi-tenancy, transactional email, image
+uploads, a themed component library and a worked CRUD example — so your first
+commit is your product, not your plumbing.
 
 [![CI](https://github.com/tguelcan/tstack/actions/workflows/ci.yml/badge.svg)](https://github.com/tguelcan/tstack/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
