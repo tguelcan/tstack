@@ -13,7 +13,7 @@
 </script>
 
 <header
-	class="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 bg-base-100/50 px-4 backdrop-blur-xs"
+	class="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 bg-base-100/90 px-4 backdrop-blur-xs"
 >
 	<!-- The label toggles the drawer checkbox in `AppShell`; it needs no script,
 	     which is why the mobile menu works before hydration. -->
@@ -27,7 +27,7 @@
 
 	<!-- A plain GET form, so pressing Enter navigates even without JavaScript. -->
 	<form method="GET" action="/crud" class="hidden flex-1 md:block">
-		<label class="input max-w-sm input-sm">
+		<label class="input max-w-sm rounded-full input-sm">
 			<Icon name="Search01Icon" size={16} />
 			<input type="search" name="q" placeholder="Search tasks…" aria-label="Search tasks" />
 		</label>
@@ -37,7 +37,6 @@
 		<Button
 			href="/dashboard"
 			color="ghost"
-			size="sm"
 			modifier="circle"
 			icon="Notification01Icon"
 			ariaLabel="Notifications"

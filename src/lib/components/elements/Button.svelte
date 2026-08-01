@@ -51,6 +51,14 @@
 		rounded?: boolean;
 		tooltip?: string;
 		tooltipPosition?: TooltipPosition;
+		/**
+		 * Native browser hint. Unlike `tooltip` (the daisyUI bubble) this is also
+		 * what assistive tech falls back to for the button's name when the visible
+		 * label is hidden — as in the collapsed sidebar.
+		 */
+		title?: string;
+		/** For buttons that toggle something open and shut, e.g. the sidebar. */
+		ariaExpanded?: boolean;
 		responsive?: boolean;
 		preloadData?: boolean;
 	};
@@ -84,6 +92,8 @@
 		tooltip,
 		ariaLabel,
 		tooltipPosition = 'top',
+		title,
+		ariaExpanded,
 		responsive = false,
 		preloadData = true
 	}: Props = $props();
@@ -140,6 +150,8 @@
 	<svelte:element
 		this={href ? 'a' : 'button'}
 		aria-label={ariaLabel}
+		aria-expanded={ariaExpanded}
+		{title}
 		role={href ? 'link' : 'button'}
 		tabindex="0"
 		type={href ? undefined : type}

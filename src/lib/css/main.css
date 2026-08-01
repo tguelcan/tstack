@@ -104,6 +104,14 @@
 	@apply hover:text-base-100;
 }
 
+.menu-title {
+	@apply text-xs font-medium text-base-content/40;
+}
+
+th {
+	@apply text-left text-sm font-medium text-base-content/60;
+}
+
 /*
  * The app sidebar collapses to icon width. The state lives in `data-sidebar` on
  * `<html>` rather than in a Svelte class, so the inline script in `app.html` can

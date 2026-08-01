@@ -3,8 +3,13 @@
 	import Button from '$components/elements/Button.svelte';
 	import Footer from '$components/layout/Footer.svelte';
 	import Logo from '$components/layout/Logo.svelte';
+	import { getIsSignedIn } from '$remotes/auth.remote';
 
 	let { children }: { children: Snippet } = $props();
+
+	// Sending a signed-in visitor to the login form is a dead end, so the one
+	// button in this header points at the app instead once there is a session.
+	const signedIn = $derived(await getIsSignedIn());
 </script>
 
 <!-- The public surface: landing page, the component showcase and the legal
@@ -14,7 +19,12 @@
 	<header>
 		<div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 py-4">
 			<Logo />
-			<Button href="/login" color="primary" size="sm" rounded>Sign in</Button>
+
+			{#if signedIn}
+				<Button href="/dashboard" color="primary" size="sm" rounded>Dashboard</Button>
+			{:else}
+				<Button href="/login" color="primary" size="sm" rounded>Sign in</Button>
+			{/if}
 		</div>
 	</header>
 

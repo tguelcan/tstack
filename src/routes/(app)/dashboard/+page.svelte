@@ -81,7 +81,7 @@
 			</ul>
 
 			{#snippet footer()}
-				<Button href="/team" color="neutral" size="sm">Invite people</Button>
+				<Button href="/team" color="ghost" size="sm" icon="UserAdd01Icon">Invite people</Button>
 			{/snippet}
 		</Card>
 

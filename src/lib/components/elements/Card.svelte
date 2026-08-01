@@ -56,7 +56,7 @@
      within its own `overflow-x-auto`. -->
 <section
 	class={[
-		'not-prose card min-w-0 border bg-base-100',
+		'not-prose card min-w-0 shadow-sm',
 		tone ? borderMap[tone] : 'border-base-300',
 		className
 	]}

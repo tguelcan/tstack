@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import Button from '$components/elements/Button.svelte';
 	import Icon from '$components/elements/Icon.svelte';
 	import Logo from './Logo.svelte';
 	import { appNavigation, isActive } from './navigation';
@@ -36,9 +37,9 @@
 	<nav class="flex-1 space-y-6 overflow-y-auto px-3 pb-4">
 		{#each appNavigation as section (section.label)}
 			<div>
-				<p
-					class="sidebar-label px-3 pb-1.5 text-xs font-medium tracking-wider text-base-content/40 uppercase"
-				>
+				<!-- `sidebar-label` is what hides this when the sidebar collapses;
+				     without it the heading stays and gets clipped at 72px. -->
+				<p class="sidebar-label menu-title">
 					{section.label}
 				</p>
 
@@ -70,17 +71,22 @@
 	<!-- Collapsing only exists on the desktop layout; below `lg` the sidebar is an
 	     off-canvas drawer that is either open or gone. -->
 	<div class="hidden shrink-0 p-3 lg:block">
-		<button
+		<Button
 			type="button"
-			class="sidebar-item btn w-full justify-start gap-3 btn-ghost btn-sm"
+			color="ghost"
+			size="sm"
+			class="sidebar-item w-full justify-start gap-3"
 			onclick={() => sidebar.toggle()}
-			aria-expanded={!sidebar.collapsed}
+			ariaExpanded={!sidebar.collapsed}
 			title={sidebar.collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
 		>
-			<span class={['inline-flex transition-transform', sidebar.collapsed && 'rotate-180']}>
-				<Icon name="ArrowLeft01Icon" size={18} />
-			</span>
+			{#snippet iconLeft()}
+				<span class={['inline-flex transition-transform', sidebar.collapsed && 'rotate-180']}>
+					<Icon name="ArrowLeft01Icon" size={18} />
+				</span>
+			{/snippet}
+
 			<span class="sidebar-label">Collapse</span>
-		</button>
+		</Button>
 	</div>
 </aside>

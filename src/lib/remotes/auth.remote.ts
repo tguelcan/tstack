@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { internalPath } from '$helper/form';
 import { auth } from '$server/auth';
 import { config } from '$server/config';
-import { fail, isAuthError, requestHeaders } from '$server/guard';
+import { fail, isAuthError, requestHeaders, getSession } from '$server/guard';
 import { emailSchema, passwordSchema, personNameSchema } from '$server/schemas';
 
 /**
@@ -27,6 +27,16 @@ const redirectToSchema = z.string().max(500).optional();
 export const getAuthProviders = query(async () =>
 	(['google', 'github'] as const).filter((provider) => config.auth.socialProviders[provider])
 );
+
+/**
+ * Whether anybody is signed in — nothing more.
+ *
+ * The public header uses it to point at the dashboard instead of the login
+ * form. Deliberately a boolean rather than the session: this runs on pages any
+ * visitor can reach, and a name or an email has no business travelling there.
+ * `getSession` never throws, so this is safe to await outside a boundary.
+ */
+export const getIsSignedIn = query(async () => !!(await getSession()));
 
 export const login = form(
 	z.object({

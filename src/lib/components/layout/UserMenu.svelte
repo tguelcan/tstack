@@ -22,8 +22,8 @@
      state of our own. `keepFocus`/`closeDropdown` handle the browsers that do
      not focus clicked menu items; see `elements/dropdown.ts`. -->
 <div class="dropdown dropdown-end">
-	<div tabindex="0" role="button" class="btn h-10 gap-2 btn-ghost px-1.5 sm:pr-3">
-		<Avatar {name} src={avatar} size={28} />
+	<div tabindex="0" role="button" class="btn rounded-full btn-ghost">
+		<Avatar {name} src={avatar} size={24} />
 		<span class="hidden max-w-32 truncate text-sm font-medium sm:inline">{name}</span>
 	</div>
 
