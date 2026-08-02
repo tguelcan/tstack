@@ -35,6 +35,17 @@ const AuthSchema = z.object({
 		google: z.boolean(),
 		github: z.boolean()
 	}),
+	/**
+	 * Headers to read the visitor's IP from, in order, for rate limiting. Behind
+	 * a proxy that terminates TLS — Railway, Fly, a load balancer — the socket
+	 * address is the proxy's, so without this every visitor shares one bucket.
+	 *
+	 * Only list a header the proxy in front of you *overwrites*. Anything a
+	 * client can set reaches Better Auth verbatim, and a spoofed value would let
+	 * one caller rate-limit as many identities as it likes. Empty means "use the
+	 * socket address" — correct when nothing sits in front of the app.
+	 */
+	ipAddressHeaders: z.array(z.string().min(1)),
 	session: z.object({
 		/** Seconds a session stays valid. */
 		expiresIn: z.number().int().positive(),

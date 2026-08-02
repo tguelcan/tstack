@@ -1,4 +1,4 @@
-import { redirect, type Handle } from '@sveltejs/kit';
+import { redirect, type Handle, type HandleServerError } from '@sveltejs/kit';
 import { auth } from '$server/auth';
 import { prisma } from '$server/db';
 
@@ -80,4 +80,27 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	return resolve(event);
+};
+
+/**
+ * What the server prints when something the app did not anticipate goes wrong.
+ *
+ * The visitor gets the generic "Internal Error" page — an error message can
+ * carry a query, a path or a token, and none of that belongs on screen. The log
+ * gets the part that makes the page diagnosable afterwards: which route, which
+ * method, and the stack. Without this a production 500 is a dead end, because
+ * remote functions run far away from the page that triggered them.
+ *
+ * Wire up an error tracker here if you use one; `event.locals.user` is already
+ * populated at this point.
+ */
+export const handleError: HandleServerError = ({ error, event, status, message }) => {
+	if (status !== 404) {
+		console.error(
+			`[error] ${status} ${event.request.method} ${event.url.pathname} — ${message}`,
+			error
+		);
+	}
+
+	return { message: 'Internal Error' };
 };

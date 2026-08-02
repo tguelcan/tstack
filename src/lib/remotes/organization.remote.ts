@@ -203,6 +203,12 @@ export const createOrganization = form(
 			fail(error, 'Could not create the organization.');
 		}
 
+		// The client still holds the `getWorkspace()` it fetched on the onboarding
+		// page, where there was no organization yet. Without this refresh the app
+		// shell renders against that stale answer after the redirect and `/dashboard`
+		// comes up empty.
+		void getWorkspace().refresh();
+
 		redirect(303, '/dashboard');
 	}
 );
@@ -221,6 +227,10 @@ export const switchOrganization = form(
 		if (!membership) redirect(303, '/onboarding');
 
 		await auth.api.setActiveOrganization({ headers: requestHeaders(), body: { organizationId } });
+
+		// Same reason as in `createOrganization`: the shell would otherwise keep
+		// rendering the organization the visitor just switched away from.
+		void getWorkspace().refresh();
 
 		redirect(303, '/dashboard');
 	}
@@ -404,6 +414,10 @@ export const acceptInvitation = form(
 		if (organizationId) {
 			await auth.api.setActiveOrganization({ headers: requestHeaders(), body: { organizationId } });
 		}
+
+		// The invitee arrives from onboarding, where `getWorkspace()` answered that
+		// they belong nowhere. Refresh it, or the dashboard renders against that.
+		void getWorkspace().refresh();
 
 		redirect(303, '/dashboard');
 	}

@@ -9,6 +9,7 @@
 			"google": false,
 			"github": false
 		},
+		"ipAddressHeaders": ["x-forwarded-for"],
 		"session": {
 			"expiresIn": 604800,
 			"updateAge": 86400,

@@ -211,6 +211,16 @@ export const auth = betterAuth({
 		freshAge: config.auth.session.freshAge
 	},
 
+	/**
+	 * Rate limiting counts per IP. Behind a proxy that terminates TLS the socket
+	 * address is the proxy's, so without this every visitor shares a single
+	 * bucket — which is exactly what Better Auth warns about at startup. See
+	 * `ipAddressHeaders` in `config.json` for why that list stays deliberate.
+	 */
+	...(config.auth.ipAddressHeaders.length
+		? { advanced: { ipAddress: { ipAddressHeaders: config.auth.ipAddressHeaders } } }
+		: {}),
+
 	databaseHooks: {
 		session: {
 			create: {
