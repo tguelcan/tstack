@@ -6,8 +6,6 @@
 	import Card from '$components/elements/Card.svelte';
 	import Field from '$components/elements/Field.svelte';
 	import Modal from '$components/elements/Modal.svelte';
-	import Switch from '$components/elements/Switch.svelte';
-	import { theme } from '$components/layout/theme-state.svelte';
 	import { rootIssues } from '$helper/form';
 	import { config } from '$config';
 	import {
@@ -111,21 +109,6 @@
 			{/snippet}
 		</Card>
 	</form>
-
-	<Card
-		title="Appearance"
-		description="Only for this browser — it is not part of the organization."
-	>
-		<!-- A preference, not a setting on the account: it lives in `localStorage`
-		     and is applied by the inline script in `app.html` before the first
-		     paint. That is also why it is readable by members, unlike the fields
-		     above. -->
-		<Switch
-			label="Dark mode"
-			description="Follows your system on the first visit, then remembers what you pick here."
-			bind:checked={() => theme.current === 'dark', (on) => (theme.current = on ? 'dark' : 'light')}
-		/>
-	</Card>
 
 	<Card title="Danger zone" icon="Alert01Icon" tone="error">
 		<p class="text-sm">

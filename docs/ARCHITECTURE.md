@@ -22,7 +22,7 @@ The SaaS scaffolding is split into [route groups](https://svelte.dev/docs/kit/ad
 | -------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- |
 | `(auth)`       | `/login`, `/register`, `/verify-email`, `/forgot-password`, `/reset-password` | Form and footer on the left, brand panel from `lg` up |
 | `(onboarding)` | `/onboarding`, `/accept-invitation/[id]`                                      | A single centred column                               |
-| `(app)`        | `/dashboard`, `/crud/*`, `/members`, `/profile`, `/settings/*`                | `AppShell`: collapsible sidebar + topbar              |
+| `(app)`        | `/dashboard`, `/crud/*`, `/members`, `/profile/*`, `/settings/*`              | `AppShell`: collapsible sidebar + topbar              |
 | `(public)`     | `/`, `/components`, and `(content)` nested inside                             | Shared header and footer for the site                 |
 | `(content)`    | `/privacy`, `/terms`, `/imprint` — written as `+page.md`                      | Prose column inside `(public)`                        |
 | —              | `/api/auth/*`, `/uploads/*`                                                   | None                                                  |
@@ -35,6 +35,14 @@ template is the dashboard's figures and the billing plans, which still come from
 page in `(app)` is scoped to one. That group has its own layout for the same reason — the brand
 panel of `(auth)` would read as a step backwards, and the shell's sidebar would be a menu of
 pages that all bounce straight back.
+
+Settings are split by **who a change affects**, each area with its own tabs: `/settings` holds
+what everyone in the organization sees (name, address, logo, billing, deleting the workspace),
+`/profile` holds what belongs to one person (details, notifications, sign-in, theme). Mixing the
+two is how a settings screen becomes a junk drawer — and it matters here because the two have
+different permissions: the organization tab is read-only for members, while everybody may change
+their own. Personal pages used to live under `/settings`; `src/hooks.server.ts` redirects the two
+old paths.
 
 Note that a group is part of the route id, so `resolve()` and `RouteParams<…>` take `'/(app)/crud/[id]'`, not `'/crud/[id]'` — the URL stays `/crud/…` either way.
 

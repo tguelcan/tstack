@@ -26,8 +26,20 @@ const needsOrganization = (id: string) => id.startsWith('/(app)');
 /** Pointless once you are signed in. */
 const forGuests = (id: string) => id.startsWith('/(auth)');
 
+/**
+ * Personal settings used to live under `/settings`, next to the organization's,
+ * until the two were separated. These keep old links and bookmarks working.
+ */
+const moved: Record<string, string> = {
+	'/settings/notifications': '/profile/notifications',
+	'/settings/security': '/profile/security'
+};
+
 export const handle: Handle = async ({ event, resolve }) => {
 	if (event.isRemoteRequest) return resolve(event);
+
+	const destination = moved[event.url.pathname];
+	if (destination) redirect(308, destination + event.url.search);
 
 	const session = await auth.api.getSession({ headers: event.request.headers });
 

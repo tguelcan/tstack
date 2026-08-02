@@ -12,15 +12,13 @@
 				"items": [
 					{ "href": "/dashboard", "label": "Dashboard", "icon": "DashboardSquare01Icon" },
 					{ "href": "/crud", "label": "Tasks", "icon": "Task01Icon" },
-					{ "href": "/members", "label": "Members", "icon": "UserGroupIcon" }
+					{ "href": "/members", "label": "Members", "icon": "UserGroupIcon" },
+					{ "href": "/settings", "label": "Settings", "icon": "Settings01Icon" }
 				]
 			},
 			{
 				"label": "Account",
-				"items": [
-					{ "href": "/profile", "label": "Profile", "icon": "User02Icon" },
-					{ "href": "/settings", "label": "Settings", "icon": "Settings01Icon" }
-				]
+				"items": [{ "href": "/profile", "label": "Profile", "icon": "User02Icon" }]
 			},
 			{
 				"label": "Reference",

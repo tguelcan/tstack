@@ -36,7 +36,7 @@
 
 <PageTitle text={task?.description ?? 'Task not found'} />
 
-<Button href={back} color="ghost" size="sm" arrowLeft class="mb-4">Back to tasks</Button>
+<Button href={back} color="ghost" arrowLeft class="mb-4">Back to tasks</Button>
 
 {#if task}
 	<!-- One form instance per task. Without `for(...)` these are module-wide
@@ -87,7 +87,7 @@
 
 				{#snippet footer()}
 					<Button href={back} color="ghost">Cancel</Button>
-					<Button color="primary">Save</Button>
+					<Button color="primary" loading={!!update.pending}>Save</Button>
 				{/snippet}
 			</Card>
 		</form>
@@ -132,7 +132,9 @@
 		<p class="rounded-box bg-base-200 px-4 py-3 font-medium">{task.description}</p>
 
 		{#snippet actions()}
-			<Button form="delete-task" color="error" icon="Delete02Icon">Delete</Button>
+			<Button form="delete-task" color="error" icon="Delete02Icon" loading={!!remove.pending}>
+				Delete
+			</Button>
 		{/snippet}
 	</Modal>
 {:else}

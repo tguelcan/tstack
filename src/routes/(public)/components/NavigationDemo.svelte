@@ -6,8 +6,8 @@
 
 	const tabs = [
 		{ href: '/settings', label: 'General', icon: 'Settings01Icon' },
-		{ href: '/settings/notifications', label: 'Notifications', icon: 'Notification01Icon' },
-		{ href: '/settings/security', label: 'Security', icon: 'Shield01Icon' }
+		{ href: '/profile/notifications', label: 'Notifications', icon: 'Notification01Icon' },
+		{ href: '/profile/security', label: 'Security', icon: 'Shield01Icon' }
 	];
 </script>
 

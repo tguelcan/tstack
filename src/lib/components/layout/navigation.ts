@@ -17,7 +17,7 @@ export const legalNavigation = config.navigation.legal;
 /**
  * Whether `href` is the section the visitor is currently in.
  *
- * Matches sub-paths as well, so `/settings/security` keeps the "Settings" entry
+ * Matches sub-paths as well, so `/profile/security` keeps the "Profile" entry
  * highlighted. `/` is compared exactly, otherwise it would match everything.
  */
 export function isActive(pathname: string, href: string): boolean {

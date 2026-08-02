@@ -28,15 +28,21 @@
 
 <PageTitle text="New task" />
 
-<Button href={back} color="ghost" size="sm" arrowLeft class="mb-4">Back to tasks</Button>
+<Button href={back} color="ghost" arrowLeft class="mb-4">Back to tasks</Button>
 
 <PageHeader title="New task" description="One line on what needs to happen." />
 
 <!-- `{...createTask.enhance(...)}` supplies `method`/`action` (which works without
-     JavaScript) plus an attachment that progressively enhances the submission. -->
+     JavaScript) plus an attachment that progressively enhances the submission.
+     `enhance` also switches off the automatic form reset, so the fields have to
+     be cleared by hand — otherwise the next "New task" opens with the previous
+     description still in it, because the form object outlives the page. Only on
+     success: a rejected submit should keep what was typed. -->
 <form
 	{...createTask.enhance(async (create) => {
 		await create.submit().updates(listToRefresh());
+
+		if (!create.fields.allIssues()?.length) create.element.reset();
 	})}
 >
 	<input {...createTask.fields.returnTo.as('hidden', back)} />
@@ -52,7 +58,7 @@
 
 		{#snippet footer()}
 			<Button href={back} color="ghost">Cancel</Button>
-			<Button color="primary">Create</Button>
+			<Button color="primary" loading={!!createTask.pending}>Create</Button>
 		{/snippet}
 	</Card>
 </form>
