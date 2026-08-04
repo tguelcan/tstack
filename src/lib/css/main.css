@@ -1,6 +1,17 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
-@plugin 'daisyui';
+/*
+ * `themes: false` because the two themes below are named `light` and `dark`
+ * too. With daisyUI's own versions also emitted, both sets target
+ * `[data-theme='light']` and the winner is decided by source order — until
+ * Lightning CSS minifies the build and folds daisyUI's selector list into
+ * `:is(:root:has(input.theme-controller[value=light]:checked), [data-theme=light])`.
+ * `:is()` takes the specificity of its most specific argument, so the built-in
+ * theme suddenly outweighs ours and only the production build turns blue.
+ */
+@plugin 'daisyui' {
+	themes: false;
+}
 
 /*
  * `dark:` has to follow the theme the visitor picked, not their operating
